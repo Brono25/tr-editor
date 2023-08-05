@@ -1,0 +1,15 @@
+name: tr-editor
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - matplotlib
+  - tk
+  - pydub
+  - pip
+  - pytest
+  - pip:
+    - pyaudio==0.2.13
+    - pyannote.metrics
