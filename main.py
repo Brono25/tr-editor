@@ -1,9 +1,8 @@
-from gui import GUI
+
 from audio_player import AudioPlayer
+from mediator import Mediator
+if __name__ == '__main__':
 
-gui = GUI()
-player = AudioPlayer()
-
-gui.register(player)
-
-gui.run()
+    med = Mediator()
+    
+    

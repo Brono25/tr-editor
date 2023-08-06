@@ -1,0 +1,8 @@
+audio_file_path: null
+audio_filename: null
+transcript_path: null
+transcript_filename: null
+curr_state:
+  start: null
+  end: null
+transcript: []
