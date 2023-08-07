@@ -6,7 +6,7 @@ import os
 
 SESSION_SAVE_FILE = ".treditor_save"
 
-class Session:
+class SessionData:
     def __init__(self):
         
         self.audio_player = AudioPlayer()

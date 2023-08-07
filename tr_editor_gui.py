@@ -2,21 +2,15 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
 
-class TkGui:
-    def __init__(self, session):
-        self.session = session
+class TrEditorGui:
+    def __init__(self, manager):
+        self.manager = manager  
         self.root = tk.Tk()
         self.root.title("TR-Editor")
-
-        # Assign session methods to local attributes
-        self.session_new_session = session.new_session
-        self.session_open_audio_file = session.open_audio_file
-        self.session_dump_session = session.dump_session
-        self.session_open_session = session.open_session
-        self.session_open_transcript = session.open_transcript
         
         self.init_ops_frame()
         self.init_other_elements()
+
 
     def init_ops_frame(self):
         self.ops_frame = tk.Frame(self.root)
@@ -29,14 +23,14 @@ class TkGui:
         self.wav_file_entry = tk.Entry(self.ops_frame, width=50)  
         self.wav_file_entry.pack(pady=10)
 
-        new_session_button = tk.Button(self.ops_frame, text="New Session", command=self.new_session)
+        new_session_button = tk.Button(self.ops_frame, text="New Session", command=self.manager.new_session)
         new_session_button.pack(pady=5)
 
         # Button to open WAV file
-        open_wav_button = tk.Button(self.ops_frame, text="Open WAV", command=self.open_audio_file)
+        open_wav_button = tk.Button(self.ops_frame, text="Open WAV", command=None)
         open_wav_button.pack(pady=5)
         
-        open_session_button = tk.Button(self.ops_frame, text="Open Session", command=self.open_session)
+        open_session_button = tk.Button(self.ops_frame, text="Open Session", command=None)
         open_session_button.pack(pady=5, side=tk.LEFT)  # Change pack to position button to left
         
         # Add session label next to the open session button
@@ -46,16 +40,16 @@ class TkGui:
         
 
         # Button to open transcript
-        open_transcript_button = tk.Button(self.ops_frame, text="Open Transcript", command=self.open_transcript)
+        open_transcript_button = tk.Button(self.ops_frame, text="Open Transcript", command=None)
         open_transcript_button.pack(pady=5)
 
     def init_other_elements(self):
         # Button to play audio
-        play_audio_button = tk.Button(self.root, text="Play", command=self.session.play_audio_segment)
+        play_audio_button = tk.Button(self.root, text="Play", command=None)
         play_audio_button.pack(pady=5)
 
         # Button for Data Dump
-        data_dump_button = tk.Button(self.root, text="Data Dump", command=self.data_dump)
+        data_dump_button = tk.Button(self.root, text="Data Dump", command=self.manager.data_dump)
         data_dump_button.pack(pady=5)
 
     def update_session_label(self, new_text):
@@ -68,7 +62,7 @@ class TkGui:
             filetypes=[("YAML files", "*.yml")],
         )
         if file_path:
-            self.session_new_session(file_path)
+            self.manager.new_session(file_path) 
 
     def open_session(self):
             file_path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yml")])
@@ -96,7 +90,7 @@ class TkGui:
                 messagebox.showerror("Error", f"Failed to open transcript: {str(e)}")
 
     def data_dump(self):
-        self.session_dump_session(self.session.session_data)
+        self.manager.data_dump()
 
     def run(self):
         self.root.mainloop()
