@@ -1,16 +1,13 @@
 
-from session_data import SessionData
-from tr_editor_gui import TrEditorGui
+from session_io import SessionIO
 from session_manager import SessionManager
-
+from session_data import SessionData
 def main():
-    # Instantiate the Model
-    session = SessionData()
-    
-    # Instantiate the Controller, passing the Model to it
-    manager = SessionManager(session)
-    
-    # Start the main loop of the GUI
+    session_data = SessionData()
+    io = SessionIO(session_data)
+
+
+    manager = SessionManager(session_data, io)
     manager.view.run()
 
 if __name__ == "__main__":

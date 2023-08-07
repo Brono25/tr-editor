@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
 
-class TrEditorGui:
+class SessionView:
     def __init__(self, manager):
         self.manager = manager  
         self.root = tk.Tk()
@@ -23,15 +23,15 @@ class TrEditorGui:
         self.wav_file_entry = tk.Entry(self.ops_frame, width=50)  
         self.wav_file_entry.pack(pady=10)
 
-        new_session_button = tk.Button(self.ops_frame, text="New Session", command=self.manager.new_session)
+        new_session_button = tk.Button(self.ops_frame, text="New Session", command=self.new_session)
         new_session_button.pack(pady=5)
 
         # Button to open WAV file
-        open_wav_button = tk.Button(self.ops_frame, text="Open WAV", command=None)
+        open_wav_button = tk.Button(self.ops_frame, text="Open WAV", command=self.open_audio_file)
         open_wav_button.pack(pady=5)
         
-        open_session_button = tk.Button(self.ops_frame, text="Open Session", command=None)
-        open_session_button.pack(pady=5, side=tk.LEFT)  # Change pack to position button to left
+        open_session_button = tk.Button(self.ops_frame, text="Open Session", command=self.open_session)
+        open_session_button.pack(pady=5, side=tk.LEFT) 
         
         # Add session label next to the open session button
         self.session_label_var = tk.StringVar()  # Create a StringVar to hold the label text
@@ -66,10 +66,10 @@ class TrEditorGui:
 
     def open_session(self):
             file_path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yml")])
+            
             if file_path:
                 try:
-                    self.session_open_session(file_path)
-                    self.update_session_label(os.path.basename(file_path))
+                    self.manager.open_session(file_path)
                 except Exception as e:
                     messagebox.showerror("Error", f"Failed to open session: {str(e)}")
                     self.session_label_var.set("Failed to open session!")  
@@ -89,8 +89,6 @@ class TrEditorGui:
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to open transcript: {str(e)}")
 
-    def data_dump(self):
-        self.manager.data_dump()
 
     def run(self):
         self.root.mainloop()
