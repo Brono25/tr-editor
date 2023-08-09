@@ -1,6 +1,35 @@
-audio_filename: null
-transcript_filename: null
-curr_state:
-  start: null
-  end: null
-transcript: []
+session_data:
+  audio_filename: null
+  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09-2.tr
+  transcript:
+  - - 0.47
+    - 2.107
+    - KAY
+    - ENG
+    - '!so'
+  - - 0.471
+    - 2.106
+    - KAY
+    - SPA
+    - "!s\xED@s hay@s un@s"
+  - - 0.472
+    - 2.105
+    - KAY
+    - ENG
+    - '!range'
+  - - 0.473
+    - 2.104
+    - KAY
+    - SPA
+    - "!ah\xED@s"
+segment_data:
+  window_start: 0.47
+  window_end: 2.107
+  segment_start: 0.47
+  segment_end: 2.107
+  segment_label: KAY
+  segment_index: 0
+  segment_text: '!so'
+  segment_language: ENG
+  plot_yaxis: TODO
+  plot_xaxis: TODO

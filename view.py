@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from debug import Debug
 import os
 
-class SessionView:
-    def __init__(self, manager):
-        self.manager = manager  
+class View:
+    def __init__(self, controller):
+        self.controller = controller  
         self.root = tk.Tk()
         self.root.title("TR-Editor")
         
@@ -52,7 +53,7 @@ class SessionView:
         play_audio_button.pack(pady=5)
 
         # Button for Data Dump
-        data_dump_button = tk.Button(self.root, text="Data Dump", command=self.manager.data_dump)
+        data_dump_button = tk.Button(self.root, text="Data Dump", command=self.controller.data_dump)
         data_dump_button.pack(pady=5)
 
     def update_session_label(self, session):
@@ -85,11 +86,11 @@ class SessionView:
             filetypes=[("YAML files", "*.yml")],
         )
         if file_path:
-            self.manager.new_session(file_path) 
+            self.controller.new_session(file_path) 
 
     def open_session(self):
             session_path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yml")])
-            self.manager.open_session(session_path)
+            self.controller.open_session(session_path)
             
 
 
@@ -102,7 +103,7 @@ class SessionView:
 
     def open_transcript(self):
         transcript_filename = filedialog.askopenfilename(filetypes=[("Tr files", "*.tr")])
-        self.manager.open_transcript(transcript_filename)
+        self.controller.open_transcript(transcript_filename)
 
 
     def run(self):

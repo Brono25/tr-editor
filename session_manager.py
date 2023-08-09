@@ -1,59 +1,30 @@
-
-from session_view import SessionView
-
+from audio_player import AudioPlayer
+import yaml
 import os
 
+# controlls the io of sessionsession_data
+
+
 class SessionManager:
-    def __init__(self, data, io):
+    def __init__(self, session_data):
+        self.session_data = session_data
 
-        self.data = data
-        self.io = io
-        self.view = SessionView(self)  
-        
-        self.initialise_session()
+    def load_session_data(self, session_name):
+        try:
+            with open(session_name, "r") as file:
+                session_data_dict = yaml.safe_load(file)
+                self.session_data.update_from_dict(session_data_dict["session_data"])
+            return True
+        except (FileNotFoundError, yaml.YAMLError, KeyError):
+            return False
 
-
-        
-    def initialise_session(self):
-        self.session_name = self.io.get_session_name_from_cache()
-        if self.session_name:
-            self.io.load_data(self.session_name)
-            self.update_labels()
-            self.view.update_transcript_label(self.data.transcript_filename)
-            self.view.activate_open_buttons()
-            
-    def new_session(self, session_name):
-        self.session_name = session_name
-        self.io.new_data(self.session_name)
-        self.io.save_data(self.session_name)
-
-        self.io.cache_session_name(self.session_name)
-        self.update_labels()
-        self.view.activate_open_buttons()
-
-
-    def open_session(self, session_name):
-        self.session_name = session_name
-        self.io.cache_session_name(self.session_name)
-        self.io.load_data(self.session_name)
-        self.update_labels()
-        self.view.activate_open_buttons()
-
-
-    def open_transcript(self, transcript_filename):
-        
-        self.io.load_transcript_into_data(transcript_filename)
-        self.io.save_data(self.session_name)
-        self.update_labels()
-
-
-    def update_labels(self):
-        self.view.update_transcript_label(self.data.transcript_filename)
-        self.view.update_session_label(self.session_name)
-        self.view.update_audiofile_label(self.data.audio_filename)
-
-
-    def data_dump(self):
-    
-        self.io.dump_data(self.data, self.session_name)
-
+    def load_transcript(self, transcript_filename):
+        self.session_data.transcript_filename = transcript_filename
+        self.session_data.transcript = []
+        with open(self.session_data.transcript_filename, "r") as f:
+            for line in f.readlines():
+                line = line.rstrip()
+                if line:
+                    start, end, label, language, text = line.split("|")
+                    element = [float(start), float(end), label, language, text]
+                    self.session_data.transcript.append(element)
