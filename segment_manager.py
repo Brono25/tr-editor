@@ -15,7 +15,7 @@ class SegmentManager:
             return False
 
 
-    def load_segment_data_from_transcript(self, segment_index, transcript):
+    def change_curr_segment(self, segment_index, transcript):
         
         segment = transcript[segment_index]
         (

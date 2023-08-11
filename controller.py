@@ -18,19 +18,18 @@ class Controller:
         self.segment_manager = SegmentManager(self.segment_data)
         self.utils = Utilities()
         self.view = View(self)
+        self.segment_index = 0
 
         if session_name := self.utils.get_session_name():
             self.open_session(session_name)
 
     def open_session(self, session_name):
         self.utils.set_session_name(session_name)
-        if not self.session_manager.load_session_data(session_name):
-            return
-        elif not self.segment_manager.load_segment_data(session_name):
-            return
+        if self.session_manager.load_session_data(session_name):
+            if self.segment_manager.load_segment_data(session_name):
 
-        self.update_labels()
-        self.view.activate_open_buttons()
+                self.update_labels()
+                self.view.activate_open_buttons()
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -44,7 +43,7 @@ class Controller:
         self.session_manager.load_transcript(transcript_filename)
         self.save_session(self.utils.get_session_name())
         self.update_labels()
-        self.load_segment(self.utils.get_segment_index())
+        self.load_segment(self.segment_index)
 
     def update_labels(self):
         self.view.update_transcript_label(self.session_data.transcript_filename)
@@ -52,6 +51,7 @@ class Controller:
         self.view.update_audiofile_label(self.session_data.audio_filename)
 
     def data_dump(self):
+        print(f"Index = {self.segment_index}")
         if session_name := self.utils.get_session_name():
             session_name = os.path.basename(session_name)
             Debug.print_session_data(self.segment_data, f"{session_name} segment data:")
@@ -60,9 +60,4 @@ class Controller:
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)
 
-    def load_segment(self, segment_index):
-        transcript = self.session_data.transcript
-        self.segment_manager.load_segment_data_from_transcript(
-            segment_index, transcript
-        )
-        self.save_session(self.utils.get_session_name())
+

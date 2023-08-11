@@ -48,12 +48,12 @@ session_data:
     - ENG
     - they do it every day
 segment_data:
+  segment_index: 0
   window_start: 0.47
   window_end: 2.107
   segment_start: 0.47
   segment_end: 2.107
   segment_label: KAY
-  segment_index: 0
   segment_text: '!so'
   segment_language: ENG
   plot_yaxis: TODO

@@ -39,19 +39,10 @@ class Utilities:
         with open(self.session_cache, "w") as f:
             yaml.dump(cache_data, f)
 
-    def get_segment_index(self):
-        with open(self.session_cache, "r") as f:
-            cache_data = yaml.safe_load(f)
-            return cache_data.get("curr_segment_index", 0)
 
-    def get_segment_index(self):
-        with open(self.session_cache, "r") as f:
-            cache_data = yaml.safe_load(f)
-            segment_index = cache_data.get("curr_segment_index", 0)
-            return segment_index if isinstance(segment_index, int) else 0
 
     def initialise_cache(self):
-        initial_data = {"curr_session_name": None, "curr_segment_index": 0}
+        initial_data = {"curr_session_name": None}
 
         if os.path.exists(self.session_cache):
             with open(self.session_cache, "r") as f:
