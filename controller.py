@@ -18,18 +18,18 @@ class Controller:
         self.segment_manager = SegmentManager(self.segment_data)
         self.utils = Utilities()
         self.view = View(self)
-        self.segment_index = 0
 
         if session_name := self.utils.get_session_name():
             self.open_session(session_name)
 
     def open_session(self, session_name):
         self.utils.set_session_name(session_name)
-        if self.session_manager.load_session_data(session_name):
-            if self.segment_manager.load_segment_data(session_name):
-
+        if self.session_manager.load_session_data_from_savefile(session_name):
+            if self.segment_manager.load_segment_data_from_savefile(session_name):
                 self.update_labels()
                 self.view.activate_open_buttons()
+        self.view.update_segment_control_buttons(self.session_data)
+        self.view.update_text(self.segment_data)
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -37,21 +37,41 @@ class Controller:
         self.segment_data.reset()
         self.save_session(session_name)
         self.update_labels()
+        self.view.update_text(self.segment_data)
         self.view.activate_open_buttons()
+        self.view.deactivate_segment_control_buttons()
 
     def open_transcript(self, transcript_filename):
         self.session_manager.load_transcript(transcript_filename)
+        self.segment_manager.initialise_segment_data_from_transcript(
+            self.session_data.transcript
+        )
         self.save_session(self.utils.get_session_name())
         self.update_labels()
-        self.load_segment(self.segment_index)
+        self.view.update_segment_control_buttons(self.session_data)
+        self.view.update_text(self.segment_data)
 
     def update_labels(self):
         self.view.update_transcript_label(self.session_data.transcript_filename)
         self.view.update_session_label(self.utils.get_session_name())
         self.view.update_audiofile_label(self.session_data.audio_filename)
 
+    def increment_index(self):
+        new_index = self.segment_data.curr_index + 1
+        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
+        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.save_session(self.utils.get_session_name())
+        self.view.update_text(self.segment_data)
+
+    def decrement_index(self):
+        new_index = self.segment_data.curr_index - 1
+        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
+        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.save_session(self.utils.get_session_name())
+        self.view.update_text(self.segment_data)
+
     def data_dump(self):
-        print(f"Index = {self.segment_index}")
+        print(f"Index = {self.segment_data.curr_index}")
         if session_name := self.utils.get_session_name():
             session_name = os.path.basename(session_name)
             Debug.print_session_data(self.segment_data, f"{session_name} segment data:")
@@ -59,5 +79,3 @@ class Controller:
 
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)
-
-

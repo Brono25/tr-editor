@@ -12,8 +12,8 @@ class Utilities:
 
     def save_session(self, session_data, segment_data, session_name):
         data = {
-            "session_data": session_data.to_dict(),
             "segment_data": segment_data.to_dict(),
+            "session_data": session_data.to_dict(),
         }
         with open(session_name, "w") as file:
             yaml.dump(data, file, default_flow_style=False, sort_keys=False)
@@ -38,8 +38,6 @@ class Utilities:
         cache_data["curr_session_name"] = session_name
         with open(self.session_cache, "w") as f:
             yaml.dump(cache_data, f)
-
-
 
     def initialise_cache(self):
         initial_data = {"curr_session_name": None}

@@ -1,52 +1,106 @@
 import numpy as np
 
-class SegmentData:
-    def __init__(self):
-        self.segment_index = 0
-        self.window_start = None
-        self.window_end = None
-        self.segment_start = None
-        self.segment_end = None
-        self.segment_label = None
-        self.segment_text = None
-        self.segment_language = None
-        self.plot_yaxis = None
-        self.plot_xaxis = None
+
+class Segment:
+    def __init__(self, start=None, end=None, label=None, language=None, text=None):
+        self.start = start
+        self.end = end
+        self.label = label
+        self.text = text
+        self.language = language
 
     def to_dict(self):
         return {
-            "segment_index": self.segment_index,
-            "window_start": self.window_start,
-            "window_end": self.window_end,
-            "segment_start": self.segment_start,
-            "segment_end": self.segment_end,
-            "segment_label": self.segment_label,
-            "segment_text": self.segment_text,
-            "segment_language": self.segment_language,
+            "start": self.start,
+            "end": self.end,
+            "label": self.label,
+            "text": self.text,
+            "language": self.language,
+        }
+    def update_from_dict(self, data):
+        self.start = data.get("start")
+        self.end = data.get("end")
+        self.label = data.get("label")
+        self.text = data.get("text")
+        self.language = data.get("language")
+
+    def reset(self):
+        self.start = None
+        self.end = None
+        self.label = None
+        self.text = None
+        self.language = None
+
+class Window:
+    def __init__(self, start=None, end=None, plot_xaxis=None, plot_yaxis=None):
+        self.start = start
+        self.end = end
+        self.plot_yaxis = plot_yaxis
+        self.plot_xaxis = plot_xaxis
+
+    def to_dict(self):
+        return {
+            "start": self.start,
+            "end": self.end,
             "plot_yaxis": self.plot_yaxis,
             "plot_xaxis": self.plot_xaxis,
         }
-
     def update_from_dict(self, data):
-        self.segment_index = data.get("segment_index")
-        self.window_start = data.get("window_start")
-        self.window_end = data.get("window_end")
-        self.segment_start = data.get("segment_start")
-        self.segment_end = data.get("segment_end")
-        self.segment_label = data.get("segment_label")
-        self.segment_text = data.get("segment_text")
-        self.segment_language = data.get("segment_language")
+        self.start = data.get("start")
+        self.end = data.get("end")
         self.plot_yaxis = data.get("plot_yaxis")
         self.plot_xaxis = data.get("plot_xaxis")
-       
+
     def reset(self):
-        self.segment_index = 0
-        self.window_start = None
-        self.window_end = None
-        self.segment_start = None
-        self.segment_end = None
-        self.segment_label = None
-        self.segment_text = None
-        self.segment_language = None
-        self.plot_yaxis = []
-        self.plot_xaxis = []
+        self.start = None
+        self.end = None
+        self.plot_yaxis = None
+        self.plot_xaxis = None
+
+class SegmentData:
+    def __init__(self):
+        self.curr_index = 0
+        self.prev_index = None
+        self.next_index = 1
+        self.num_segments = 0
+        self.window = Window()
+        self.curr_segment = Segment()
+        self.prev_segment = Segment()
+        self.next_segment = Segment()  
+
+    def to_dict(self):
+        return {
+            "curr_index": self.curr_index,
+            "prev_index": self.prev_index,
+            "next_index": self.next_index,
+            "num_segments": self.num_segments,
+            "window": self.window.to_dict(),
+            "curr_segment": self.curr_segment.to_dict(),
+            "prev_segment": self.prev_segment.to_dict(),  
+            "next_segment": self.next_segment.to_dict()  
+        }
+
+    def update_from_dict(self, data):
+        self.curr_index = data.get("curr_index")
+        self.prev_index = data.get("prev_index")
+        self.next_index = data.get("next_index")
+        self.num_segments = data.get("num_segments")
+        window_data = data.get("window", {})
+        self.window.update_from_dict(window_data)
+        segment_data = data.get("curr_segment", {})
+        self.curr_segment.update_from_dict(segment_data)
+        prev_segment_data = data.get("prev_segment", {}) 
+        self.prev_segment.update_from_dict(prev_segment_data)  
+        next_segment_data = data.get("next_segment", {})  
+        self.next_segment.update_from_dict(next_segment_data)  
+
+    def reset(self):
+        self.curr_index = 0
+        self.prev_index = None
+        self.next_index = 1
+        self.next_segments = 0
+        self.num_segments = 0
+        self.window.reset()
+        self.curr_segment.reset()
+        self.prev_segment.reset()  
+        self.next_segment.reset() 

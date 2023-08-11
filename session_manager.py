@@ -9,7 +9,7 @@ class SessionManager:
     def __init__(self, session_data):
         self.session_data = session_data
 
-    def load_session_data(self, session_name):
+    def load_session_data_from_savefile(self, session_name):
         try:
             with open(session_name, "r") as file:
                 session_data_dict = yaml.safe_load(file)
@@ -28,3 +28,4 @@ class SessionManager:
                     start, end, label, language, text = line.split("|")
                     element = [float(start), float(end), label, language, text]
                     self.session_data.transcript.append(element)
+    
