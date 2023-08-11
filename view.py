@@ -125,9 +125,11 @@ class View:
     def init_text_frame(self):
         self.text_frame = tk.Frame(self.root)
         self.text_frame.pack(pady=10, padx=10)
-        wrap_len = 500
+        wrap_len = 700
         col = 0
         font_size = 20
+        label_width = 60
+        line_spacing = 10  # Add this line for spacing
 
         padding_label = tk.Label(self.text_frame, text="", width=20)
         padding_label.grid(row=0, column=0, rowspan=3)
@@ -139,9 +141,10 @@ class View:
             wraplength=wrap_len,
             justify="left",
             fg="grey",
-            font=("Helvetica", font_size - 4),
+            width=label_width,
+            font=("Helvetica", font_size - 5),
         )
-        self.prev_text.grid(row=0, column=col, sticky="w")
+        self.prev_text.grid(row=0, column=col, sticky="w", pady=line_spacing)
 
         self.curr_text = tk.Label(
             self.text_frame,
@@ -149,9 +152,10 @@ class View:
             anchor="w",
             wraplength=wrap_len,
             justify="left",
+            width=label_width,
             font=("Helvetica", font_size),
         )
-        self.curr_text.grid(row=1, column=col, sticky="w")
+        self.curr_text.grid(row=1, column=col, sticky="w", pady=line_spacing)
 
         self.next_text = tk.Label(
             self.text_frame,
@@ -160,9 +164,12 @@ class View:
             wraplength=wrap_len,
             justify="left",
             fg="grey",
-            font=("Helvetica", font_size - 4),
+            width=label_width,
+            font=("Helvetica", font_size - 5),
         )
-        self.next_text.grid(row=2, column=col, sticky="w")
+        self.next_text.grid(row=2, column=col, sticky="w", pady=line_spacing)
+
+
 
     def init_plot_frame(self):
         self.plot_frame = tk.Frame(self.root)
@@ -230,26 +237,27 @@ class View:
 
     def update_text(self, segment_data):
         def get_line_text(segment, index):
-            if segment.text:
-                start, end, language, label, text = (
-                    segment.start,
-                    segment.end,
-                    segment.language,
-                    segment.label,
-                    segment.text,
-                )
+            start, end, language, label, text = (
+                segment.start,
+                segment.end,
+                segment.language,
+                segment.label,
+                segment.text,
+            ) if segment.text else (None, None, None, None, None)
+
+            if text:
                 return f"Line {index}:  ({start:.2f},   {end:.2f}) : {label} : {language} : {text}"
             return "-"
 
-        self.prev_text.config(
-            text=f"{get_line_text(segment_data.prev_segment, segment_data.prev_index)}"
-        )
-        self.curr_text.config(
-            text=f"{get_line_text(segment_data.curr_segment, segment_data.curr_index)}"
-        )
-        self.next_text.config(
-            text=f"{get_line_text(segment_data.next_segment, segment_data.next_index)}"
-        )
+        prev_text = get_line_text(segment_data.prev_segment, segment_data.prev_index)
+        curr_text = get_line_text(segment_data.curr_segment, segment_data.curr_index)
+        next_text = get_line_text(segment_data.next_segment, segment_data.next_index)
+
+        self.prev_text.config(text=prev_text, fg="black")
+        self.curr_text.config(text=curr_text, fg="darkred" if "!" in curr_text else "black")
+        self.next_text.config(text=next_text, fg="black")
+
+
 
     def update_segment_control_buttons(self, session_data):
         if session_data.transcript:
