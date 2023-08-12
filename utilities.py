@@ -48,7 +48,6 @@ class Utilities:
                 if (
                     existing_data is None
                     or not all(key in existing_data for key in initial_data.keys())
-                    or not isinstance(existing_data.get("curr_segment_index"), int)
                 ):
                     remake_file = True
                 else:
@@ -62,6 +61,7 @@ class Utilities:
         else:
             with open(self.session_cache, "w") as f:
                 yaml.dump(initial_data, f, default_flow_style=False, sort_keys=False)
+
 
     def is_data_correct_format(self, data):
         keys = data.keys()

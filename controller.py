@@ -19,17 +19,24 @@ class Controller:
         self.utils = Utilities()
         self.view = View(self)
 
+        self.view_seg_ctrl = self.view.segment_control_frame
+        self.view_sess_ctrl = self.view.session_control_frame
+        self.view_plot = self.view.plot_frame
+        self.view_text = self.view.text_frame
+
         if session_name := self.utils.get_session_name():
             self.open_session(session_name)
+       
 
     def open_session(self, session_name):
         self.utils.set_session_name(session_name)
         if self.session_manager.load_session_data_from_savefile(session_name):
             if self.segment_manager.load_segment_data_from_savefile(session_name):
                 self.update_labels()
-                self.view.activate_open_buttons()
-        self.view.update_segment_control_buttons(self.session_data)
-        self.view.update_text(self.segment_data)
+                self.view_sess_ctrl.activate_open_buttons()
+                self.view_seg_ctrl.update_line_count_label(len(self.session_data.transcript))
+        self.view_seg_ctrl.update_segment_control_buttons(self.session_data)
+        self.view_text.update_text(self.segment_data)
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -37,9 +44,10 @@ class Controller:
         self.segment_data.reset()
         self.save_session(session_name)
         self.update_labels()
-        self.view.update_text(self.segment_data)
-        self.view.activate_open_buttons()
-        self.view.deactivate_segment_control_buttons()
+        self.view_text.update_text(self.segment_data)
+        self.view_sess_ctrl.activate_open_buttons()
+        self.view_seg_ctrl.deactivate_segment_control_buttons()
+        self.view_seg_ctrl.update_line_count_label(len(self.session_data.transcript))
 
     def open_transcript(self, transcript_filename):
         self.session_manager.load_transcript(transcript_filename)
@@ -48,27 +56,14 @@ class Controller:
         )
         self.save_session(self.utils.get_session_name())
         self.update_labels()
-        self.view.update_segment_control_buttons(self.session_data)
-        self.view.update_text(self.segment_data)
+        self.view_seg_ctrl.update_segment_control_buttons(self.session_data)
+        self.view_text.update_text(self.segment_data)
+        self.view_seg_ctrl.update_line_count_label(len(self.session_data.transcript))
 
     def update_labels(self):
-        self.view.update_transcript_label(self.session_data.transcript_filename)
-        self.view.update_session_label(self.utils.get_session_name())
-        self.view.update_audiofile_label(self.session_data.audio_filename)
-
-    def increment_index(self):
-        new_index = self.segment_data.curr_index + 1
-        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
-        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
-        self.save_session(self.utils.get_session_name())
-        self.view.update_text(self.segment_data)
-
-    def decrement_index(self):
-        new_index = self.segment_data.curr_index - 1
-        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
-        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
-        self.save_session(self.utils.get_session_name())
-        self.view.update_text(self.segment_data)
+        self.view_sess_ctrl.update_transcript_label(self.session_data.transcript_filename)
+        self.view_sess_ctrl.update_session_label(self.utils.get_session_name())
+        self.view_sess_ctrl.update_audiofile_label(self.session_data.audio_filename)
 
     def data_dump(self):
         print(f"Index = {self.segment_data.curr_index}")
@@ -76,6 +71,28 @@ class Controller:
             session_name = os.path.basename(session_name)
             Debug.print_session_data(self.segment_data, f"{session_name} segment data:")
             Debug.print_session_data(self.session_data, f"{session_name} session data:")
+
+    def change_segment_index(self, index):
+        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(index)
+        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.save_session(self.utils.get_session_name())
+        self.view_text.update_text(self.segment_data)
+
+    def increment_index(self):
+        new_index = self.segment_data.curr_index + 1
+        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
+        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.save_session(self.utils.get_session_name())
+        self.view_text.update_text(self.segment_data)
+        self.view_seg_ctrl.update_text_input(c_i)
+
+    def decrement_index(self):
+        new_index = self.segment_data.curr_index - 1
+        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
+        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.save_session(self.utils.get_session_name())
+        self.view_text.update_text(self.segment_data)
+        self.view_seg_ctrl.update_text_input(c_i)
 
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)

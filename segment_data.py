@@ -98,7 +98,6 @@ class SegmentData:
         self.curr_index = 0
         self.prev_index = None
         self.next_index = 1
-        self.next_segments = 0
         self.num_segments = 0
         self.window.reset()
         self.curr_segment.reset()
