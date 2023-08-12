@@ -26,9 +26,11 @@ class SegmentManager:
         )
         self.change_segment(session_data.transcript, curr_index - 1)
 
-    def change_segment(self, transcript, new_index):
+    def change_segment(self, transcript, new_index, overlap_callback):
         p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
         self._load_segment(transcript, p, c, n)
+        overlaps = self.detect_overlap(self.segment_data, transcript)
+        overlap_callback(overlaps)
 
     def _load_segment_data_from_savefile(self, session_name):
         try:
@@ -95,3 +97,15 @@ class SegmentManager:
         next_index = index + 1 if index < num_segments - 1 else None
 
         return prev_index, curr_index, next_index
+
+    def detect_overlap(self, segment_data, transcript):
+        curr_index = segment_data.curr_index
+        curr_start, _, curr_label, _, _ = transcript[curr_index]
+        for index in range(curr_index - 1, -1, -1):
+            start, end, label, language, text = transcript[index]
+
+            if label == curr_label:
+                if end >= curr_start:
+                    return f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
+        else:
+            return None

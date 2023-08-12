@@ -17,6 +17,7 @@ class TextFrame:
         line_spacing = 10
         padding_label = tk.Label(self.frame, text="", width=20)
         padding_label.grid(row=0, column=0, rowspan=3)
+        
 
         self.prev_text = tk.Label(
             self.frame,
@@ -53,6 +54,22 @@ class TextFrame:
         )
         self.next_text.grid(row=2, column=col, sticky="w", pady=line_spacing)
 
+        # Create a horizontal line 
+        self.horizontal_line = tk.Canvas(self.frame, width=wrap_len, height=2, bg="lightgrey")
+        self.horizontal_line.grid(row=3, column=col, pady=line_spacing - 7)
+
+        self.overlaps_label = tk.Label(
+            self.frame,
+            text="Overlaps with: ",
+            anchor="w",
+            wraplength=wrap_len,
+            justify="left",
+            width=label_width,
+            font=("Helvetica", font_size - 5),
+        )
+        self.overlaps_label.grid(row=4, column=col, sticky="w", pady=line_spacing - 7)
+
+
     def update_text(self, segment_data):
         def get_line_text(segment, index):
             start, end, language, label, text = (
@@ -80,3 +97,6 @@ class TextFrame:
             text=curr_text, fg="darkred" if "!" in curr_text else "black"
         )
         self.next_text.config(text=next_text, fg="black")
+
+    def update_overlaps_label(self, overlap_text):
+        self.overlaps_label.config(text=f"Overlaps with: {overlap_text}")
