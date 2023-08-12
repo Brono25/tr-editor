@@ -61,8 +61,8 @@ class SegmentControlFrame:
     def delete_segment(self):
         print("Delete")
 
-    def update_segment_control_buttons(self, session_data):
-        if session_data.transcript:
+    def update_segment_control_buttons(self, transcript):
+        if transcript:
             self.activate_segment_control_buttons()
         else:
             self.deactivate_segment_control_buttons()
@@ -87,9 +87,7 @@ class SegmentControlFrame:
         self.play_button["state"] = tk.DISABLED
         self.stop_button["state"] = tk.DISABLED
 
-    def update_line_count_label(self, new_text):
-        self.new_label.config(text=new_text)
-    
+
     def update_line_count_label(self, count):
         if count - 1 >= 0:
             self.line_count_label.config(text=f" of {count - 1}")
@@ -102,6 +100,9 @@ class SegmentControlFrame:
             integer_input = int(input_text)
             self.controller.change_segment_index(integer_input)  
 
-    def update_text_input(self, new_text):
-        self.text_box_input.delete(0, tk.END) 
-        self.text_box_input.insert(0, str(new_text)) 
+    def update_text_input(self, new_text=''):
+        original_state = self.text_box_input.cget('state')
+        self.text_box_input.config(state=tk.NORMAL)
+        self.text_box_input.delete(0, tk.END)
+        self.text_box_input.insert(0, str(new_text))
+        self.text_box_input.config(state=original_state)
