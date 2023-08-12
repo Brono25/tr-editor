@@ -47,29 +47,30 @@ class Controller:
         self.save_session(session_name)
         self.view.open_transcript(session_name, self.session_data, self.segment_data)
 
-    def change_segment_index(self, index):
-        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(index)
-        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+    def change_segment_index(self, new_index):
+        self.segment_manager.change_segment(self.session_data.transcript, new_index)
         self.save_session(self.utils.get_session_name())
         self.view.change_segment(self.segment_data)
 
     def increment_index(self):
         new_index = self.segment_data.curr_index + 1
-        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
-        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.segment_manager.change_segment(self.session_data.transcript, new_index)
         self.save_session(self.utils.get_session_name())
         self.view.change_segment(self.segment_data)
 
     def decrement_index(self):
         new_index = self.segment_data.curr_index - 1
-        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
-        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.segment_manager.change_segment(self.session_data.transcript, new_index)
         self.save_session(self.utils.get_session_name())
         self.view.change_segment(self.segment_data)
 
     def change_segment_input_box(self, new_index):
-        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
-        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.segment_manager.change_segment(self.session_data.transcript, new_index)
+        self.save_session(self.utils.get_session_name())
+        self.view.change_segment(self.segment_data)
+
+    def delete_segment(self):
+        self.segment_manager.delete_segment(self.session_data, self.segment_data)
         self.save_session(self.utils.get_session_name())
         self.view.change_segment(self.segment_data)
 

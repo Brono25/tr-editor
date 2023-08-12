@@ -10,7 +10,7 @@ from view_plot import PlotFrame
 from view_text import TextFrame
 import matplotlib
 
-# matplotlib.use('TkAgg')  # or another backend such as 'Qt5Agg'
+matplotlib.use('TkAgg')  # or another backend such as 'Qt5Agg'
 
 
 class View:
@@ -27,7 +27,7 @@ class View:
 
     def open_session(self, session_name, session_data, segment_data):
         transcript = session_data.transcript
-        self.segment_control_frame.update_segment_control_buttons(transcript)
+        self.segment_control_frame.update_segment_control_buttons(len(transcript))
         self._update_session_labels(session_name, session_data)
         self.session_control_frame.activate_open_buttons()
         self.text_frame.update_text(segment_data)
@@ -45,7 +45,7 @@ class View:
     def open_transcript(self, session_name, session_data, segment_data):
         self._update_session_labels(session_name, session_data)
         self.segment_control_frame.update_segment_control_buttons(
-            session_data.transcript
+            len(session_data.transcript)
         )
         self.text_frame.update_text(segment_data)
         self.segment_control_frame.update_line_count_label(len(session_data.transcript))
@@ -57,6 +57,9 @@ class View:
     def change_segment(self, segment_data):
         self.text_frame.update_text(segment_data)
         self.segment_control_frame.update_text_input(segment_data.curr_index)
+        self.segment_control_frame.update_line_count_label(segment_data.num_segments)
+        self.segment_control_frame.update_segment_control_buttons(segment_data.num_segments)
+
 
     def _update_session_labels(self, session_name, session_data):
         transcript_name = session_data.transcript_filename

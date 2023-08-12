@@ -15,6 +15,21 @@ class SegmentManager:
     def open_transcript(self, transcript):
         self._initialise_segment_data_from_transcript(transcript)
 
+    def delete_segment(self, session_data, segment_data):
+        if not segment_data.num_segments:
+            return
+        curr_index = segment_data.curr_index
+        transcript = session_data.transcript
+        start, end, label, language, text = transcript.pop(curr_index)
+        print(
+            f"Removed line {curr_index}: ({start}, {end}) {label}, {language}, {text}"
+        )
+        self.change_segment(session_data.transcript, curr_index - 1)
+
+    def change_segment(self, transcript, new_index):
+        p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
+        self._load_segment(transcript, p, c, n)
+
     def _load_segment_data_from_savefile(self, session_name):
         try:
             with open(session_name, "r") as file:
@@ -45,29 +60,35 @@ class SegmentManager:
                 plot_xaxis="TODO",
             )
 
-    def change_segment(self, transcript, prev_index, curr_index, next_index):
+    def _load_segment(self, transcript, prev_index, curr_index, next_index):
         self.segment_data.prev_index = prev_index
         self.segment_data.curr_index = curr_index
         self.segment_data.next_index = next_index
+        self.segment_data.num_segments = len(transcript)
 
-        self.segment_data.curr_segment = Segment(*transcript[curr_index])
+        if transcript:
+            self.segment_data.curr_segment = Segment(*transcript[curr_index])
 
-        if prev_index is not None:
-            self.segment_data.prev_segment = Segment(*transcript[prev_index])
+            if prev_index is not None:
+                self.segment_data.prev_segment = Segment(*transcript[prev_index])
+            else:
+                self.segment_data.prev_segment.reset()
+            if next_index is not None:
+                self.segment_data.next_segment = Segment(*transcript[next_index])
+            else:
+                self.segment_data.next_segment.reset()
+
+            segment_start, segment_end, _, _, _ = transcript[curr_index]
+            self.segment_data.window = Window(
+                start=segment_start,
+                end=segment_end,
+                plot_yaxis="TODO",
+                plot_xaxis="TODO",
+            )
         else:
-            self.segment_data.prev_segment.reset()
-        if next_index is not None:
-            self.segment_data.next_segment = Segment(*transcript[next_index])
-        else:
-            self.segment_data.next_segment.reset()
+            self.segment_data.curr_segment = Segment()
 
-        segment_start, segment_end, _, _, _ = transcript[curr_index]
-        self.segment_data.window = Window(
-            start=segment_start, end=segment_end, plot_yaxis="TODO", plot_xaxis="TODO"
-        )
-
-    def get_prev_curr_next_indexes(self, index):
-        num_segments = self.segment_data.num_segments
+    def _get_prev_curr_next_indexes(self, index, num_segments):
         index = max(0, min(index, num_segments - 1))
         prev_index = index - 1 if index > 0 else None
         curr_index = index

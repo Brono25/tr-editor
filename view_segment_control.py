@@ -1,9 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from debug import Debug
-import os
+from tkinter import messagebox
 
 
 class SegmentControlFrame:
@@ -49,7 +45,7 @@ class SegmentControlFrame:
         self.line_count_label.grid(row=1, column=5)
 
         self.delete_segment_button = tk.Button(
-            self.frame, text="Delete", command=self.delete_segment, state=tk.DISABLED
+            self.frame, text="Delete", command=self.confirm_delete, state=tk.DISABLED
         )
         self.delete_segment_button.grid(row=1, column=6)
 
@@ -59,11 +55,15 @@ class SegmentControlFrame:
     def stop_segment(self):
         print("Stop")
 
-    def delete_segment(self):
-        print("Delete")
+    def confirm_delete(self):
+        result = messagebox.askyesno(
+            "Confirmation", "Are you sure you want to delete the current segment?"
+        )
+        if result:
+            self.controller.delete_segment()
 
-    def update_segment_control_buttons(self, transcript):
-        if transcript:
+    def update_segment_control_buttons(self, num_segments):
+        if num_segments:
             self.activate_segment_control_buttons()
         else:
             self.deactivate_segment_control_buttons()
