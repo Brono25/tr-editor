@@ -5,6 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from debug import Debug
 import os
 
+
 class TextFrame:
     def __init__(self, parent):
         self.frame = tk.Frame(parent)
@@ -52,8 +53,6 @@ class TextFrame:
         )
         self.next_text.grid(row=2, column=col, sticky="w", pady=line_spacing)
 
-
-
     def update_text(self, segment_data):
         def get_line_text(segment, index):
             start, end, language, label, text = (
@@ -81,5 +80,3 @@ class TextFrame:
             text=curr_text, fg="darkred" if "!" in curr_text else "black"
         )
         self.next_text.config(text=next_text, fg="black")
-
-

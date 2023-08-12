@@ -43,6 +43,7 @@ class SegmentControlFrame:
 
         self.text_box_input = tk.Entry(self.frame, width=5, state=tk.DISABLED)
         self.text_box_input.grid(row=1, column=4)
+        self.text_box_input.bind("<Return>", self.text_box_input_process)
 
         self.line_count_label = tk.Label(self.frame, text=" of (None)")
         self.line_count_label.grid(row=1, column=5)
@@ -57,7 +58,7 @@ class SegmentControlFrame:
 
     def stop_segment(self):
         print("Stop")
-    
+
     def delete_segment(self):
         print("Delete")
 
@@ -87,7 +88,6 @@ class SegmentControlFrame:
         self.play_button["state"] = tk.DISABLED
         self.stop_button["state"] = tk.DISABLED
 
-
     def update_line_count_label(self, count):
         if count - 1 >= 0:
             self.line_count_label.config(text=f" of {count - 1}")
@@ -98,11 +98,18 @@ class SegmentControlFrame:
         input_text = self.text_box_input.get()
         if input_text.isdigit():
             integer_input = int(input_text)
-            self.controller.change_segment_index(integer_input)  
+            self.controller.change_segment_index(integer_input)
 
-    def update_text_input(self, new_text=''):
-        original_state = self.text_box_input.cget('state')
+    def update_text_input(self, new_text=""):
+        original_state = self.text_box_input.cget("state")
         self.text_box_input.config(state=tk.NORMAL)
         self.text_box_input.delete(0, tk.END)
         self.text_box_input.insert(0, str(new_text))
         self.text_box_input.config(state=original_state)
+
+    def text_box_input_process(self, event):
+        input_text = self.text_box_input.get()
+        try:
+            self.controller.change_segment_input_box(int(input_text))
+        except ValueError:
+            pass

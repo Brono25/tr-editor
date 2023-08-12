@@ -9,10 +9,13 @@ from view_segment_control import SegmentControlFrame
 from view_plot import PlotFrame
 from view_text import TextFrame
 import matplotlib
-#matplotlib.use('TkAgg')  # or another backend such as 'Qt5Agg'
+
+# matplotlib.use('TkAgg')  # or another backend such as 'Qt5Agg'
+
 
 class View:
     def __init__(self, controller):
+        self.controller = controller
         self.root = tk.Tk()
         self.session_control_frame = SessionControlFrame(self.root, controller)
         self.segment_control_frame = SegmentControlFrame(self.root, controller)
@@ -30,8 +33,6 @@ class View:
         self.text_frame.update_text(segment_data)
         self.segment_control_frame.update_text_input(segment_data.curr_index)
         self.segment_control_frame.update_line_count_label(len(transcript))
-        
-        
 
     def new_session(self, session_name, segment_data, session_data):
         self._update_session_labels(session_name, session_data)
@@ -49,7 +50,9 @@ class View:
         self.text_frame.update_text(segment_data)
         self.segment_control_frame.update_line_count_label(len(session_data.transcript))
         self.segment_control_frame.update_text_input(segment_data.curr_index)
-        
+
+    def change_segment_input_box(self, new_index):
+        self.controller.change_segment_input_box(new_index)
 
     def change_segment(self, segment_data):
         self.text_frame.update_text(segment_data)

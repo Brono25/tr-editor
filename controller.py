@@ -67,6 +67,12 @@ class Controller:
         self.save_session(self.utils.get_session_name())
         self.view.change_segment(self.segment_data)
 
+    def change_segment_input_box(self, new_index):
+        p_i, c_i, n_i = self.segment_manager.get_prev_curr_next_indexes(new_index)
+        self.segment_manager.change_segment(self.session_data.transcript, p_i, c_i, n_i)
+        self.save_session(self.utils.get_session_name())
+        self.view.change_segment(self.segment_data)
+
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)
 
