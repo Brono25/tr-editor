@@ -6,7 +6,16 @@ class SegmentManager:
     def __init__(self, segment_data):
         self.segment_data = segment_data
 
-    def load_segment_data_from_savefile(self, session_name):
+    def open_session(self, session_name):
+        return self._load_segment_data_from_savefile(session_name)
+
+    def new_session(self):
+        self.segment_data.reset()
+
+    def open_transcript(self, transcript):
+        self._initialise_segment_data_from_transcript(transcript)
+
+    def _load_segment_data_from_savefile(self, session_name):
         try:
             with open(session_name, "r") as file:
                 data_dict = yaml.safe_load(file)
@@ -15,7 +24,7 @@ class SegmentManager:
         except (FileNotFoundError, yaml.YAMLError, KeyError):
             return False
 
-    def initialise_segment_data_from_transcript(self, transcript):
+    def _initialise_segment_data_from_transcript(self, transcript):
         self.segment_data.reset()
         self.segment_data.num_segments = len(transcript)
         if self.segment_data.num_segments > 1:
