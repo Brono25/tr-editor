@@ -16,20 +16,25 @@ class SegmentManager:
             return False
 
     def initialise_segment_data_from_transcript(self, transcript):
-        self.segment_data.curr_index = 0
+        self.segment_data.reset()
         self.segment_data.num_segments = len(transcript)
+        if self.segment_data.num_segments > 1:
+            self.segment_data.curr_segment = Segment(
+                *transcript[self.segment_data.curr_index]
+            )
+            self.segment_data.next_segment = Segment(
+                *transcript[self.segment_data.next_index]
+            )
 
-        if (curr_index := self.segment_data.curr_index) is not None:
-            self.segment_data.curr_segment = Segment(*transcript[curr_index])
-        if (prev_index := self.segment_data.prev_index) is not None:
-            self.segment_data.prev_segment = Segment(*transcript[prev_index])
-        if (next_index := self.segment_data.next_index) is not None:
-            self.segment_data.next_segment = Segment(*transcript[next_index])
-
-        segment_start, segment_end, _, _, _ = transcript[curr_index]
-        self.segment_data.window = Window(
-            start=segment_start, end=segment_end, plot_yaxis="TODO", plot_xaxis="TODO"
-        )
+            segment_start, segment_end, _, _, _ = transcript[
+                self.segment_data.curr_index
+            ]
+            self.segment_data.window = Window(
+                start=segment_start,
+                end=segment_end,
+                plot_yaxis="TODO",
+                plot_xaxis="TODO",
+            )
 
     def change_segment(self, transcript, prev_index, curr_index, next_index):
         self.segment_data.prev_index = prev_index
