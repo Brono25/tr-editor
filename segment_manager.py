@@ -112,3 +112,28 @@ class SegmentManager:
         else:
             return None
 
+
+    def change_start_timestamp(self, delta, segment_data):
+        curr_start = segment_data.curr_segment.start
+        curr_end = segment_data.curr_segment.end
+        new_start = curr_start + delta
+        if new_start < 0:
+            new_start = 0
+        if new_start >= curr_end:
+            new_start = curr_end
+        segment_data.curr_segment.start = new_start
+
+    def change_end_timestamp(self, delta, segment_data):
+        curr_start = segment_data.curr_segment.start
+        curr_end = segment_data.curr_segment.end
+        new_end = curr_end + delta
+        if new_end > segment_data.num_segments:
+            new_end = segment_data.num_segments
+        if new_end <= curr_start:
+            new_end = curr_start
+        segment_data.curr_segment.end = new_end
+
+    
+    def copy_timstamp_edits_to_transcript(self, segment_data, session_data):
+        session_data.transcript[segment_data.curr_index][0] = segment_data.curr_segment.start
+        session_data.transcript[segment_data.curr_index][1] = segment_data.curr_segment.end

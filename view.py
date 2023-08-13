@@ -6,9 +6,11 @@ from debug import Debug
 import os
 from view_session_control import SessionControlFrame
 from view_segment_control import SegmentControlFrame
+from view_window_control import WindowControlFrame
 from view_plot import PlotFrame
 from view_text import TextFrame
 import matplotlib
+
 
 matplotlib.use('TkAgg')  # or another backend such as 'Qt5Agg'
 
@@ -20,7 +22,9 @@ class View:
         self.session_control_frame = SessionControlFrame(self.root, controller)
         self.segment_control_frame = SegmentControlFrame(self.root, controller)
         self.text_frame = TextFrame(self.root)
+        self.window_control_frame = WindowControlFrame(self.root, controller) 
         self.plot_frame = PlotFrame(self.root)
+        
 
     def run(self):
         self.root.mainloop()
@@ -71,4 +75,6 @@ class View:
     def update_overlaps_label(self, overlap_text):
         self.text_frame.update_overlaps_label(overlap_text)
         
-        
+    
+    def update_timestamp_labels(self, segment_data):
+        self.text_frame.update_text(segment_data)

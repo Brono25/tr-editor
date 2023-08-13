@@ -32,8 +32,9 @@ class Controller:
         if self.session_manager.open_session(session_name):
             self.segment_manager.open_session(session_name)
             self.view.open_session(session_name, self.session_data, self.segment_data)
-            self.detect_overlap(self.segment_data.curr_index, self.session_data.transcript)
-
+            self.detect_overlap(
+                self.segment_data.curr_index, self.session_data.transcript
+            )
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -49,7 +50,6 @@ class Controller:
         session_name = self.utils.get_session_name()
         self.save_session(session_name)
         self.view.open_transcript(session_name, self.session_data, self.segment_data)
-
 
     def increment_index(self):
         new_index = self.segment_data.curr_index + 1
@@ -84,6 +84,21 @@ class Controller:
 
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)
+
+    def change_start_timestamp(self, delta):
+        self.segment_manager.change_start_timestamp(delta, self.segment_data)
+        
+
+    def change_end_timestamp(self, delta):
+        self.segment_manager.change_end_timestamp(delta, self.segment_data)
+
+    def save_timestamp_edits(self):
+        self.segment_manager.copy_timstamp_edits_to_transcript(
+            self.segment_data, self.session_data
+        )
+        self.save_session(self.utils.get_session_name())
+        self.view.update_timestamp_labels(self.segment_data)
+        self.detect_overlap(self.segment_data.curr_index, self.session_data.transcript)
 
     def data_dump(self):
         print(f"Index = {self.segment_data.curr_index}")
