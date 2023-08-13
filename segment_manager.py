@@ -24,14 +24,10 @@ class SegmentManager:
         print(
             f"Removed line {curr_index}: ({start}, {end}) {label}, {language}, {text}"
         )
-        
-        
 
     def change_segment(self, transcript, new_index):
         p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
         self._load_segment(transcript, p, c, n)
-
-    
 
     def _load_segment_data_from_savefile(self, session_name):
         try:
@@ -112,7 +108,6 @@ class SegmentManager:
         else:
             return None
 
-
     def change_start_timestamp(self, delta, segment_data):
         curr_start = segment_data.curr_segment.start
         curr_end = segment_data.curr_segment.end
@@ -122,6 +117,11 @@ class SegmentManager:
         if new_start >= curr_end:
             new_start = curr_end
         segment_data.curr_segment.start = new_start
+
+    def update_window_timestamp(self, segment_data, start, end):
+        segment_data.window.start = start
+        segment_data.window.end = end
+
 
     def change_end_timestamp(self, delta, segment_data):
         curr_start = segment_data.curr_segment.start
@@ -133,7 +133,10 @@ class SegmentManager:
             new_end = curr_start
         segment_data.curr_segment.end = new_end
 
-    
     def copy_timstamp_edits_to_transcript(self, segment_data, session_data):
-        session_data.transcript[segment_data.curr_index][0] = segment_data.curr_segment.start
-        session_data.transcript[segment_data.curr_index][1] = segment_data.curr_segment.end
+        session_data.transcript[segment_data.curr_index][
+            0
+        ] = segment_data.curr_segment.start
+        session_data.transcript[segment_data.curr_index][
+            1
+        ] = segment_data.curr_segment.end

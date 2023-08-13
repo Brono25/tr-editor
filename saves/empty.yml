@@ -1,25 +1,25 @@
 segment_data:
-  curr_index: 1
-  prev_index: 0
+  curr_index: 6
+  prev_index: 5
   next_index: null
-  num_segments: 2
+  num_segments: 7
   window:
-    start: 1.1999999999999993
-    end: 3.0
+    start: 4.294
+    end: 7.485
     plot_yaxis: TODO
     plot_xaxis: TODO
   curr_segment:
-    start: 1.2999999999999994
-    end: 3.0
+    start: 4.294
+    end: 7.485
     label: KAY
-    text: two
-    language: SPA
-  prev_segment:
-    start: 0.2
-    end: 1.1999999999999993
-    label: KAY
-    text: one
+    text: '!trainees the police trainees'
     language: ENG
+  prev_segment:
+    start: 4.293
+    end: 7.486
+    label: KAY
+    text: "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
+    language: SPA
   next_segment:
     start: null
     end: null
@@ -27,16 +27,41 @@ segment_data:
     text: null
     language: null
 session_data:
-  audio_filename: null
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/overlaps.tr
+  audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
+  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09.tr
   transcript:
-  - - 0.2
-    - 1.1999999999999993
+  - - 0.47
+    - 2.107
     - KAY
     - ENG
-    - one
-  - - 1.2999999999999994
-    - 3.0
+    - '!so'
+  - - 0.471
+    - 2.106
     - KAY
     - SPA
-    - two
+    - "!s\xED@s hay@s un@s"
+  - - 0.473
+    - 2.104
+    - KAY
+    - SPA
+    - "!ah\xED@s"
+  - - 2.18
+    - 2.49
+    - VAL
+    - ENG
+    - mhm
+  - - 2.181
+    - 4.321
+    - KAY
+    - SPA
+    - "donde los polic\xEDas e practican"
+  - - 4.293
+    - 7.486
+    - KAY
+    - SPA
+    - "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
+  - - 4.294
+    - 7.485
+    - KAY
+    - ENG
+    - '!trainees the police trainees'

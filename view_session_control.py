@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 
+
 class SessionControlFrame:
-    def __init__(self, parent, controller, button_width=10):
-        self.controller = controller
-        self.frame = tk.Frame(parent)
+    def __init__(self, parent, button_width=10):
+        self.parent = parent
+        self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
-        
+
         self.session_label_var = tk.StringVar()
         self.session_label = tk.Label(self.frame, textvariable=self.session_label_var)
         self.session_label.grid(row=0, column=0, columnspan=2)
@@ -55,7 +56,7 @@ class SessionControlFrame:
         data_dump_button = tk.Button(
             self.frame,
             text="Print Data",
-            command=self.controller.data_dump,
+            command=lambda: self.parent.function_map["data_dump"](),
         )
         data_dump_button.grid(row=1, column=3)
 
@@ -66,27 +67,25 @@ class SessionControlFrame:
             filetypes=[("YAML files", "*.yml")],
         )
         if file_path:
-            self.controller.new_session(file_path)
+            self.parent.function_map["new_session"](file_path)
 
     def open_session(self):
         session_path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yml")])
         if session_path:
-            self.controller.open_session(session_path)
+            self.parent.function_map["open_session"](session_path)
 
     def open_audio_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("WAV files", "*.wav")])
         if file_path:
-            self.wav_file_entry.delete(0, tk.END)
-            self.wav_file_entry.insert(0, file_path)
-            self.session_open_audio_file(file_path)
+            self.audiofile_label_var.set(os.path.basename(file_path))
+            self.parent.function_map["open_audio_file"](file_path)
 
     def open_transcript(self):
         transcript_filename = filedialog.askopenfilename(
             filetypes=[("Tr files", "*.tr")]
         )
         if transcript_filename:
-            self.controller.open_transcript(transcript_filename)
-
+            self.parent.function_map["open_transcript"](transcript_filename)
 
     def update_session_label(self, session):
         if not session:

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 class PlotFrame:
     def __init__(self, parent):
-        self.frame = tk.Frame(parent)
+        self.frame = tk.Frame(parent.root)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self.plot_fig, self.plot_ax = plt.subplots(figsize=(5, 3))
         self.plot_ax.tick_params(axis="both", which="major", labelsize=5)

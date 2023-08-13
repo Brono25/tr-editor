@@ -3,16 +3,20 @@ from tkinter import messagebox
 
 
 class SegmentControlFrame:
-    def __init__(self, parent, controller):
-        self.controller = controller
-        self.frame = tk.Frame(parent)
+    def __init__(self, parent):
+        self.parent = parent
+
+        self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
 
         label_change_segment = tk.Label(self.frame, text="Change Segment Index")
         label_change_segment.grid(row=0, column=2, columnspan=3)
 
         self.play_button = tk.Button(
-            self.frame, text="Play", command=self.play_segment, state=tk.DISABLED
+            self.frame,
+            text="Play",
+            command=self.parent.play_audio_button,
+            state=tk.DISABLED,
         )
         self.play_button.grid(row=1, column=0)
 
@@ -24,7 +28,7 @@ class SegmentControlFrame:
         self.left_arrow_button = tk.Button(
             self.frame,
             text="\u2190",
-            command=self.controller.decrement_index,
+            command=self.parent.decrement_index,
             state=tk.DISABLED,
         )
         self.left_arrow_button.grid(row=1, column=2)
@@ -32,7 +36,7 @@ class SegmentControlFrame:
         self.right_arrow_button = tk.Button(
             self.frame,
             text="\u2192",
-            command=self.controller.increment_index,
+            command=self.parent.increment_index,
             state=tk.DISABLED,
         )
         self.right_arrow_button.grid(row=1, column=3)
@@ -49,9 +53,6 @@ class SegmentControlFrame:
         )
         self.delete_segment_button.grid(row=1, column=6)
 
-    def play_segment(self):
-        print("Play")
-
     def stop_segment(self):
         print("Stop")
 
@@ -60,7 +61,8 @@ class SegmentControlFrame:
             "Confirmation", "Are you sure you want to delete the current segment?"
         )
         if result:
-            self.controller.delete_segment()
+            self.parent.function_map["proceed_delete"]() 
+
 
     def update_segment_control_buttons(self, num_segments):
         if num_segments:
@@ -80,6 +82,12 @@ class SegmentControlFrame:
         self.text_box_input["state"] = tk.DISABLED
         self.delete_segment_button["state"] = tk.DISABLED
 
+    def update_play_stop_buttons(self, audiofile):
+        if audiofile:
+            self.activate_play_stop_buttons()
+        else:
+            self.deactivate_play_stop_buttons()
+
     def activate_play_stop_buttons(self):
         self.play_button["state"] = tk.NORMAL
         self.stop_button["state"] = tk.NORMAL
@@ -94,7 +102,6 @@ class SegmentControlFrame:
         else:
             self.line_count_label.config(text=f" of (None)")
 
-
     def update_text_input(self, new_text=""):
         original_state = self.text_box_input.cget("state")
         self.text_box_input.config(state=tk.NORMAL)
@@ -105,6 +112,7 @@ class SegmentControlFrame:
     def text_box_input_process(self, event):
         input_text = self.text_box_input.get()
         try:
-            self.controller.change_segment_input_box(int(input_text))
+            self.parent.change_segment_input_box(int(input_text))
         except ValueError:
             pass
+

@@ -8,7 +8,7 @@ import os
 
 class TextFrame:
     def __init__(self, parent):
-        self.frame = tk.Frame(parent)
+        self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
         wrap_len = 700
         col = 0

@@ -15,9 +15,10 @@ def test_no_overlap():
         [4.5, 5.0, 'KAY', 'SPA', 'four']
     ]
     for i in range(len(transcript)):
-        segment_data = create_segment_data(transcript, i) 
-        segment_manager = SegmentManager(segment_data) 
-        assert segment_manager.detect_overlap(segment_data, transcript) == None
+        segment_data = create_segment_data(transcript, i)  # Assuming this function creates the correct segment_data
+        segment_manager = SegmentManager(segment_data)
+        assert segment_manager.detect_overlap(i, transcript) == None
+
 
 
 def test_overlap_with_same_label():
@@ -31,9 +32,9 @@ def test_overlap_with_same_label():
         segment_data = create_segment_data(transcript, i)
         segment_manager = SegmentManager(segment_data)
         if i != 1:
-            assert segment_manager.detect_overlap(segment_data, transcript) == None
+            assert segment_manager.detect_overlap(i, transcript) == None
         else:
-            assert segment_manager.detect_overlap(segment_data, transcript) == "Line 0: (0.00, 1.00) : KAY : ENG : one"
+            assert segment_manager.detect_overlap(i, transcript) == "Line 0: (0.00, 1.00) : KAY : ENG : one"
 
 
 def test_overlap_with_repeating_label():
@@ -47,9 +48,9 @@ def test_overlap_with_repeating_label():
         segment_data = create_segment_data(transcript, i)
         segment_manager = SegmentManager(segment_data)
         if i != 3:
-            assert segment_manager.detect_overlap(segment_data, transcript) == None
+            assert segment_manager.detect_overlap(i, transcript) == None
         else:
-            assert segment_manager.detect_overlap(segment_data, transcript) == "Line 0: (0.00, 3.00) : A : ENG : one"
+            assert segment_manager.detect_overlap(i, transcript) == "Line 0: (0.00, 3.00) : A : ENG : one"
 
 
 def test_adjacent_segments_with_same_label():
@@ -63,9 +64,9 @@ def test_adjacent_segments_with_same_label():
         segment_data = create_segment_data(transcript, i)
         segment_manager = SegmentManager(segment_data)
         if i == 1:
-            assert segment_manager.detect_overlap(segment_data, transcript) == "Line 0: (0.00, 1.00) : A : ENG : one"
+            assert segment_manager.detect_overlap(i, transcript) == "Line 0: (0.00, 1.00) : A : ENG : one"
         else:
-            assert segment_manager.detect_overlap(segment_data, transcript) == None
+            assert segment_manager.detect_overlap(i, transcript) == None
 
 
 def test_label_fully_encompassing_another():
@@ -79,9 +80,9 @@ def test_label_fully_encompassing_another():
         segment_data = create_segment_data(transcript, i)
         segment_manager = SegmentManager(segment_data)
         if i != 1:
-            assert segment_manager.detect_overlap(segment_data, transcript) == None
+            assert segment_manager.detect_overlap(i, transcript) == None
         else:
-            assert segment_manager.detect_overlap(segment_data, transcript) == "Line 0: (0.00, 3.00) : A : ENG : one"
+            assert segment_manager.detect_overlap(i, transcript) == "Line 0: (0.00, 3.00) : A : ENG : one"
 
 
 def test_speaker_a_encompassing_speaker_b_c_b_with_overlap():
@@ -97,9 +98,9 @@ def test_speaker_a_encompassing_speaker_b_c_b_with_overlap():
         segment_manager = SegmentManager(segment_data)
 
         if i == 3:
-            assert segment_manager.detect_overlap(segment_data, transcript) == "Line 1: (1.00, 2.00) : B : SPA : two"
+            assert segment_manager.detect_overlap(i, transcript) == "Line 1: (1.00, 2.00) : B : SPA : two"
         else:
-            assert segment_manager.detect_overlap(segment_data, transcript) == None
+            assert segment_manager.detect_overlap(i, transcript) == None
 
 
 def test_speaker_a_encompassing_speaker_b_c_b_with_overlap():
@@ -114,4 +115,4 @@ def test_speaker_a_encompassing_speaker_b_c_b_with_overlap():
         segment_data = create_segment_data(transcript, i)
         segment_manager = SegmentManager(segment_data)
 
-        assert segment_manager.detect_overlap(segment_data, transcript) == None
+        assert segment_manager.detect_overlap(i, transcript) == None

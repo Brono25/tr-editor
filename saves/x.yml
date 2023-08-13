@@ -1,25 +1,25 @@
 segment_data:
-  curr_index: 3
-  prev_index: 2
+  curr_index: 2
+  prev_index: 1
   next_index: null
-  num_segments: 4
+  num_segments: 3
   window:
-    start: 3.0
+    start: 3.5
     end: 4.0
     plot_yaxis: TODO
     plot_xaxis: TODO
   curr_segment:
-    start: 3.0
+    start: 3.5
     end: 4.0
     label: KAY
     text: four
     language: SPA
   prev_segment:
-    start: 1.5
-    end: 3.5
-    label: VAL
-    text: '!three'
-    language: ENG
+    start: 2.0
+    end: 3.0
+    label: KAY
+    text: two
+    language: SPA
   next_segment:
     start: null
     end: null
@@ -27,8 +27,8 @@ segment_data:
     text: null
     language: null
 session_data:
-  audio_filename: null
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/overlaps.tr
+  audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
+  transcript_filename: /Users/brono/GitHub/tr-editer/saves/no_overlaps.tr
   transcript:
   - - 0.0
     - 1.0
@@ -40,12 +40,7 @@ session_data:
     - KAY
     - SPA
     - two
-  - - 1.5
-    - 3.5
-    - VAL
-    - ENG
-    - '!three'
-  - - 3.0
+  - - 3.5
     - 4.0
     - KAY
     - SPA
