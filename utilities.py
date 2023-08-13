@@ -2,8 +2,6 @@ import yaml
 import os
 
 
-# creating files and IO from cache
-
 
 class Utilities:
     def __init__(self):

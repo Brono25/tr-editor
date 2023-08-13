@@ -77,7 +77,7 @@ class Controller:
     def delete_segment(self):
         transcript = self.session_data.transcript
         self.segment_manager.delete_segment(self.session_data, self.segment_data)
-        self.segment_manager.change_segment(transcript, self.segment_data.prev_index)
+        self.segment_manager.change_segment(transcript, self.segment_data.curr_index)
         self.save_session(self.utils.get_session_name())
         self.view.change_segment(self.segment_data)
         self.detect_overlap(self.segment_data.curr_index, transcript)

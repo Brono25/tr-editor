@@ -24,6 +24,8 @@ class SegmentManager:
         print(
             f"Removed line {curr_index}: ({start}, {end}) {label}, {language}, {text}"
         )
+        
+        
 
     def change_segment(self, transcript, new_index):
         p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
@@ -109,3 +111,4 @@ class SegmentManager:
                     return f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
         else:
             return None
+
