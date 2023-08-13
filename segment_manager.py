@@ -24,13 +24,12 @@ class SegmentManager:
         print(
             f"Removed line {curr_index}: ({start}, {end}) {label}, {language}, {text}"
         )
-        self.change_segment(session_data.transcript, curr_index - 1)
 
-    def change_segment(self, transcript, new_index, overlap_callback):
+    def change_segment(self, transcript, new_index):
         p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
         self._load_segment(transcript, p, c, n)
-        overlaps = self.detect_overlap(self.segment_data, transcript)
-        overlap_callback(overlaps)
+
+    
 
     def _load_segment_data_from_savefile(self, session_name):
         try:
@@ -98,8 +97,9 @@ class SegmentManager:
 
         return prev_index, curr_index, next_index
 
-    def detect_overlap(self, segment_data, transcript):
-        curr_index = segment_data.curr_index
+    def detect_overlap(self, curr_index, transcript):
+        if not transcript:
+            return
         curr_start, _, curr_label, _, _ = transcript[curr_index]
         for index in range(curr_index - 1, -1, -1):
             start, end, label, language, text = transcript[index]

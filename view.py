@@ -67,3 +67,8 @@ class View:
         self.session_control_frame.update_transcript_label(transcript_name)
         self.session_control_frame.update_session_label(session_name)
         self.session_control_frame.update_audiofile_label(audio_name)
+
+    def update_overlaps_label(self, overlap_text):
+        self.text_frame.update_overlaps_label(overlap_text)
+        
+        

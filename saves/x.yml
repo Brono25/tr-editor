@@ -12,13 +12,13 @@ segment_data:
     start: 3.0
     end: 4.0
     label: KAY
-    text: '!hmmm'
+    text: four
     language: SPA
   prev_segment:
-    start: 2.0
-    end: 3.0
-    label: KAY
-    text: '!different'
+    start: 1.5
+    end: 3.5
+    label: VAL
+    text: '!three'
     language: ENG
   next_segment:
     start: null
@@ -28,25 +28,25 @@ segment_data:
     language: null
 session_data:
   audio_filename: null
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09-2.tr
+  transcript_filename: /Users/brono/GitHub/tr-editer/saves/overlaps.tr
   transcript:
   - - 0.0
     - 1.0
     - KAY
     - ENG
-    - New text
-  - - 1.0
-    - 2.0
-    - KAY
-    - SPA
-    - so its
+    - one
   - - 2.0
     - 3.0
     - KAY
+    - SPA
+    - two
+  - - 1.5
+    - 3.5
+    - VAL
     - ENG
-    - '!different'
+    - '!three'
   - - 3.0
     - 4.0
     - KAY
     - SPA
-    - '!hmmm'
+    - four

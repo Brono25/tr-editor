@@ -94,11 +94,6 @@ class SegmentControlFrame:
         else:
             self.line_count_label.config(text=f" of (None)")
 
-    def handle_text_input(self):
-        input_text = self.text_box_input.get()
-        if input_text.isdigit():
-            integer_input = int(input_text)
-            self.controller.change_segment_index(integer_input)
 
     def update_text_input(self, new_text=""):
         original_state = self.text_box_input.cget("state")

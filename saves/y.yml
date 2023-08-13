@@ -4,21 +4,21 @@ segment_data:
   next_index: null
   num_segments: 4
   window:
-    start: 3.5
+    start: 3.0
     end: 4.0
     plot_yaxis: TODO
     plot_xaxis: TODO
   curr_segment:
-    start: 3.5
+    start: 3.0
     end: 4.0
     label: KAY
-    text: four
+    text: '!hmmm'
     language: SPA
   prev_segment:
-    start: 1.5
-    end: 3.5
-    label: VAL
-    text: '!three'
+    start: 2.0
+    end: 3.0
+    label: KAY
+    text: '!different'
     language: ENG
   next_segment:
     start: null
@@ -28,25 +28,25 @@ segment_data:
     language: null
 session_data:
   audio_filename: null
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/no_overlaps.tr
+  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09-2.tr
   transcript:
   - - 0.0
     - 1.0
     - KAY
     - ENG
-    - one
+    - New text
+  - - 1.0
+    - 2.0
+    - KAY
+    - SPA
+    - so its
   - - 2.0
     - 3.0
     - KAY
-    - SPA
-    - two
-  - - 1.5
-    - 3.5
-    - VAL
     - ENG
-    - '!three'
-  - - 3.5
+    - '!different'
+  - - 3.0
     - 4.0
     - KAY
     - SPA
-    - four
+    - '!hmmm'

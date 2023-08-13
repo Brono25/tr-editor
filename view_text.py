@@ -99,4 +99,7 @@ class TextFrame:
         self.next_text.config(text=next_text, fg="black")
 
     def update_overlaps_label(self, overlap_text):
-        self.overlaps_label.config(text=f"Overlaps with: {overlap_text}")
+        if overlap_text:
+            self.overlaps_label.config(text=f"Overlaps with: {overlap_text}")
+        else:
+            self.overlaps_label.config(text=f"Overlaps with: No overlaps detected")
