@@ -28,7 +28,7 @@ class SegmentControlFrame:
         self.left_arrow_button = tk.Button(
             self.frame,
             text="\u2190",
-            command=self.parent.decrement_index,
+            command=lambda: self.parent.call_function("decrement_index"),
             state=tk.DISABLED,
         )
         self.left_arrow_button.grid(row=1, column=2)
@@ -36,9 +36,9 @@ class SegmentControlFrame:
         self.right_arrow_button = tk.Button(
             self.frame,
             text="\u2192",
-            command=self.parent.increment_index,
+            command=lambda: self.parent.call_function("increment_index"),
             state=tk.DISABLED,
-        )
+)
         self.right_arrow_button.grid(row=1, column=3)
 
         self.text_box_input = tk.Entry(self.frame, width=5, state=tk.DISABLED)
@@ -61,8 +61,7 @@ class SegmentControlFrame:
             "Confirmation", "Are you sure you want to delete the current segment?"
         )
         if result:
-            self.parent.function_map["proceed_delete"]() 
-
+            self.parent.call_function("proceed_delete")
 
     def update_segment_control_buttons(self, num_segments):
         if num_segments:
@@ -112,7 +111,7 @@ class SegmentControlFrame:
     def text_box_input_process(self, event):
         input_text = self.text_box_input.get()
         try:
-            self.parent.change_segment_input_box(int(input_text))
+            new_index = int(input_text)
+            self.parent.call_function("change_seg_input", new_index)
         except ValueError:
             pass
-

@@ -38,3 +38,4 @@ class SessionManager:
                     element = [float(start), float(end), label, language, text]
                     self.session_data.transcript.append(element)
     
+  

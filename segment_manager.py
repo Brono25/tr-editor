@@ -28,6 +28,10 @@ class SegmentManager:
     def change_segment(self, transcript, new_index):
         p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
         self._load_segment(transcript, p, c, n)
+        start = self.segment_data.curr_segment.start
+        end = self.segment_data.curr_segment.end
+        self._set_window_bounds(start, end)
+        
 
     def _load_segment_data_from_savefile(self, session_name):
         try:
@@ -52,12 +56,7 @@ class SegmentManager:
             segment_start, segment_end, _, _, _ = transcript[
                 self.segment_data.curr_index
             ]
-            self.segment_data.window = Window(
-                start=segment_start,
-                end=segment_end,
-                plot_yaxis="TODO",
-                plot_xaxis="TODO",
-            )
+            self.segment_data.window = Window(segment_start, segment_end)
 
     def _load_segment(self, transcript, prev_index, curr_index, next_index):
         self.segment_data.prev_index = prev_index
@@ -78,14 +77,15 @@ class SegmentManager:
                 self.segment_data.next_segment.reset()
 
             segment_start, segment_end, _, _, _ = transcript[curr_index]
-            self.segment_data.window = Window(
-                start=segment_start,
-                end=segment_end,
-                plot_yaxis="TODO",
-                plot_xaxis="TODO",
-            )
+            self.segment_data.window = Window(segment_start, segment_end)
         else:
             self.segment_data.curr_segment = Segment()
+
+    def _set_window_bounds(self, start, end):
+        self.segment_data.window.start = start
+        self.segment_data.window.end = end
+
+
 
     def _get_prev_curr_next_indexes(self, index, num_segments):
         index = max(0, min(index, num_segments - 1))
@@ -108,35 +108,29 @@ class SegmentManager:
         else:
             return None
 
-    def change_start_timestamp(self, delta, segment_data):
+    def change_timestamp(self, delta, segment_data, is_start):
         curr_start = segment_data.curr_segment.start
         curr_end = segment_data.curr_segment.end
-        new_start = curr_start + delta
-        if new_start < 0:
-            new_start = 0
-        if new_start >= curr_end:
-            new_start = curr_end
-        segment_data.curr_segment.start = new_start
+        num_segments = segment_data.num_segments
 
-    def update_window_timestamp(self, segment_data, start, end):
-        segment_data.window.start = start
-        segment_data.window.end = end
+        if is_start:
+            new_start = max(0, min(curr_end, curr_start + delta))
+            segment_data.curr_segment.start = new_start
+        else:
+            new_end = max(curr_start, min(num_segments, curr_end + delta))
+            segment_data.curr_segment.end = new_end
 
+    def update_window_timestamp(self, segment_data):
+        segment_data.window.start = segment_data.curr_segment.start
+        segment_data.window.end = segment_data.curr_segment.end
 
-    def change_end_timestamp(self, delta, segment_data):
-        curr_start = segment_data.curr_segment.start
-        curr_end = segment_data.curr_segment.end
-        new_end = curr_end + delta
-        if new_end > segment_data.num_segments:
-            new_end = segment_data.num_segments
-        if new_end <= curr_start:
-            new_end = curr_start
-        segment_data.curr_segment.end = new_end
+    def copy_timestamp_edits_to_transcript(self, segment_data, transcript):
+        curr_index = segment_data.curr_index
+        transcript[curr_index][0] = segment_data.curr_segment.start
+        transcript[curr_index][1] = segment_data.curr_segment.end
 
-    def copy_timstamp_edits_to_transcript(self, segment_data, session_data):
-        session_data.transcript[segment_data.curr_index][
-            0
-        ] = segment_data.curr_segment.start
-        session_data.transcript[segment_data.curr_index][
-            1
-        ] = segment_data.curr_segment.end
+    def initialise_window_data(self, segment_data, max_value):
+        segment_data.window.start = segment_data.curr_segment.start
+        segment_data.window.end = segment_data.curr_segment.end
+        segment_data.window.normaliser = max_value
+        segment_data.window.zoom_scaler = 1

@@ -10,10 +10,8 @@ from view_plot import PlotFrame
 from view_text import TextFrame
 import matplotlib
 
-
-INCREMENT = 0.1
-SMALL_INCREMENT = 25 / 1000
-
+DELTA = 250 / 1000
+SMALL_DELTA = 25 / 1000
 
 class WindowControlFrame:
     def __init__(self, parent):
@@ -42,7 +40,9 @@ class WindowControlFrame:
                 width=small_button_width,
             ).pack(side=tk.LEFT)
             tk.Button(
-                frame, text=">", command=lambda: parent.call_function(small_increase_command)
+                frame,
+                text=">",
+                command=lambda: parent.call_function(small_increase_command),
             ).pack(side=tk.LEFT)
             tk.Button(
                 frame,

@@ -56,7 +56,7 @@ class SessionControlFrame:
         data_dump_button = tk.Button(
             self.frame,
             text="Print Data",
-            command=lambda: self.parent.function_map["data_dump"](),
+            command=lambda: self.parent.call_function("data_dump"),
         )
         data_dump_button.grid(row=1, column=3)
 
@@ -67,25 +67,26 @@ class SessionControlFrame:
             filetypes=[("YAML files", "*.yml")],
         )
         if file_path:
-            self.parent.function_map["new_session"](file_path)
+            self.parent.call_function("new_session", file_path)
 
     def open_session(self):
         session_path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yml")])
         if session_path:
-            self.parent.function_map["open_session"](session_path)
+            self.parent.call_function("open_session", session_path)
+
 
     def open_audio_file(self):
         file_path = filedialog.askopenfilename(filetypes=[("WAV files", "*.wav")])
         if file_path:
             self.audiofile_label_var.set(os.path.basename(file_path))
-            self.parent.function_map["open_audio_file"](file_path)
+            self.parent.call_function("open_audio_file", file_path)
 
     def open_transcript(self):
         transcript_filename = filedialog.askopenfilename(
             filetypes=[("Tr files", "*.tr")]
         )
         if transcript_filename:
-            self.parent.function_map["open_transcript"](transcript_filename)
+            self.parent.call_function("open_transcript", transcript_filename)
 
     def update_session_label(self, session):
         if not session:

@@ -34,7 +34,9 @@ class Controller:
                 self.segment_data.curr_index, self.session_data.transcript
             )
         if (audio_filename := self.session_data.audio_filename) is not None:
-            self.audio_player.load_audio_file(audio_filename)
+            self.open_audiofile(audio_filename)
+        else:
+            self.view.clear_plot()
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -59,6 +61,10 @@ class Controller:
         self.audio_player.load_audio_file(audio_filename)
         self.save_session(self.utils.get_session_name())
         self.view.activate_audio_controls()
+        self.segment_manager.update_window_timestamp(self.segment_data)
+        normaliser = self.audio_player.audio_info.peak_amplitude
+        self.segment_manager.initialise_window_data(self.segment_data, normaliser)
+        self.update_plot()
 
     def change_segment_by_delta(self, delta):
         new_index = self.segment_data.curr_index + delta
@@ -67,29 +73,29 @@ class Controller:
         self.save_session(self.utils.get_session_name())
         self.view.update_for_change_segment(self.segment_data)
         self.detect_overlap(self.segment_data.curr_index, transcript)
+        self.update_plot()
+        self.audio_player.play_audio(self.segment_data.window.start, self.segment_data.window.end)
 
     def go_to_segment(self, new_index):
         delta = new_index - self.segment_data.curr_index
         self.change_segment_by_delta(delta)
 
     def delete_segment(self):
-        transcript = self.session_data.transcript
         self.segment_manager.delete_segment(self.session_data, self.segment_data)
-        self.segment_manager.change_segment(transcript, self.segment_data.curr_index)
-        self.save_session(self.utils.get_session_name())
-        self.view.update_for_change_segment(self.segment_data)
-        self.detect_overlap(self.segment_data.curr_index, transcript)
+        self.change_segment_by_delta(delta=0)
 
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)
 
     def change_start_timestamp(self, delta):
         self.segment_manager.change_timestamp(delta, self.segment_data, is_start=True)
-        self.segment_manager.update_window_timestamp_to_match_segment(self.segment_data)
+        self.segment_manager.update_window_timestamp(self.segment_data)
+        self.update_plot()
 
     def change_end_timestamp(self, delta):
         self.segment_manager.change_timestamp(delta, self.segment_data, is_start=False)
-        self.segment_manager.update_window_timestamp_to_match_segment(self.segment_data)
+        self.segment_manager.update_window_timestamp(self.segment_data)
+        self.update_plot()
 
     def save_timestamp_edits(self):
         transcript = self.session_data.transcript
@@ -101,7 +107,9 @@ class Controller:
         self.detect_overlap(self.segment_data.curr_index, self.session_data.transcript)
 
     def play_audio_segment(self):
-        print("play")
+        start = self.segment_data.window.start
+        end = self.segment_data.window.end
+        self.audio_player.play_audio(start, end)
 
     def data_dump(self):
         print(f"Index = {self.segment_data.curr_index}")
@@ -113,3 +121,12 @@ class Controller:
     def detect_overlap(self, curr_index, transcript):
         overlap_status = self.segment_manager.detect_overlap(curr_index, transcript)
         self.view.update_overlaps_label(overlap_status)
+
+    def update_plot(self):
+        start = self.segment_data.window.start
+        end = self.segment_data.window.end
+        if not start and not end:
+            start = 0
+            end = 0
+        y, x = self.audio_player.get_audio_time_vectors(start, end)
+        self.view.plot_audio(x, y)
