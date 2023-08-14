@@ -125,8 +125,17 @@ class Controller:
     def update_plot(self):
         start = self.segment_data.window.start
         end = self.segment_data.window.end
+        zoom_level = self.segment_data.window.zoom_scaler
         if not start and not end:
             start = 0
             end = 0
         y, x = self.audio_player.get_audio_time_vectors(start, end)
-        self.view.plot_audio(x, y)
+        self.view.plot_audio(x, y / zoom_level)
+
+    def zoom_plot(self, delta):
+        zoom_min, zoom_max = 0.1, 2
+        zoom_scaler = self.segment_data.window.zoom_scaler + delta
+        zoom_scaler = max(zoom_min, min(zoom_scaler  + delta, zoom_max))
+        self.segment_data.window.zoom_scaler = zoom_scaler
+        self.update_plot()
+

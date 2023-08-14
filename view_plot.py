@@ -2,6 +2,7 @@ import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
+
 class PlotFrame:
     def __init__(self, parent):
         self.frame = tk.Frame(parent.root)
@@ -19,6 +20,5 @@ class PlotFrame:
             self.plot_ax.plot(x, y)
         else:
             self.plot_ax.plot([])
+        self.plot_ax.set_ylim(-1, 1)
         self.plot_canvas.draw()
-
-

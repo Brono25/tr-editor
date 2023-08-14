@@ -63,7 +63,7 @@ class SegmentManager:
         self.segment_data.curr_index = curr_index
         self.segment_data.next_index = next_index
         self.segment_data.num_segments = len(transcript)
-
+        zoom_scaler = self.segment_data.window.zoom_scaler 
         if transcript:
             self.segment_data.curr_segment = Segment(*transcript[curr_index])
 
@@ -77,7 +77,7 @@ class SegmentManager:
                 self.segment_data.next_segment.reset()
 
             segment_start, segment_end, _, _, _ = transcript[curr_index]
-            self.segment_data.window = Window(segment_start, segment_end)
+            self.segment_data.window = Window(segment_start, segment_end, zoom_scaler)
         else:
             self.segment_data.curr_segment = Segment()
 

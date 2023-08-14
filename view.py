@@ -12,7 +12,7 @@ from view_window_control import WindowControlFrame
 
 DELTA = 250 / 1000
 SDELTA = 25 / 1000
-
+ZOOM_DELTA = 0.1
 # matplotlib.use("TkAgg")  # or another backend such as 'Qt5Agg'
 
 
@@ -55,8 +55,8 @@ class View:
             "change_seg_input": (lambda i: self.controller.go_to_segment(i), []),
             "proceed_delete": (self.controller.delete_segment, []),
             # View Control
-            "zoom_in": (lambda: print("Zoom in clicked!"), []),
-            "zoom_out": (lambda: print("Zoom out clicked!"), []),
+            "zoom_in": (lambda x: self.controller.zoom_plot(x), [-ZOOM_DELTA]),
+            "zoom_out": (lambda x: self.controller.zoom_plot(x), [ZOOM_DELTA]),
         }
 
     def call_function(self, function_name, *args):
