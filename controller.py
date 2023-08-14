@@ -1,14 +1,13 @@
-from view import View
-from session_data import SessionData
-from utilities import Utilities
-from segment_data import SegmentData
-from session_manager import SessionManager
-from segment_data import SegmentData
-from segment_manager import SegmentManager
+import os
+
 from audio_player import AudioPlayer
 from debug import Debug
-
-import os
+from segment_data import SegmentData
+from segment_manager import SegmentManager
+from session_data import SessionData
+from session_manager import SessionManager
+from utilities import Utilities
+from view import View
 
 
 class Controller:
@@ -21,11 +20,6 @@ class Controller:
         self.view = View(self)
         self.audio_player = AudioPlayer()
 
-        self.view_seg_ctrl = self.view.segment_control_frame
-        self.view_sess_ctrl = self.view.session_control_frame
-        self.view_plot = self.view.plot_frame
-        self.view_text = self.view.text_frame
-
         if session_name := self.utils.get_session_name():
             self.open_session(session_name)
 
@@ -33,94 +27,81 @@ class Controller:
         self.utils.set_session_name(session_name)
         if self.session_manager.open_session(session_name):
             self.segment_manager.open_session(session_name)
-            self.view.open_session(session_name, self.session_data, self.segment_data)
+            self.view.update_for_open_session(
+                session_name, self.session_data, self.segment_data
+            )
             self.detect_overlap(
                 self.segment_data.curr_index, self.session_data.transcript
             )
-        if (audio_filname := self.session_data.audio_filename) is not None:
-            self.audio_player.load_audio_file(audio_filname)
+        if (audio_filename := self.session_data.audio_filename) is not None:
+            self.audio_player.load_audio_file(audio_filename)
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
         self.session_manager.new_session()
         self.segment_manager.new_session()
         self.save_session(session_name)
-        self.view.new_session(session_name, self.segment_data, self.session_data)
-        self.view.update_overlaps_label(None)
+        self.view.update_for_new_session(
+            session_name, self.segment_data, self.session_data
+        )
 
     def open_transcript(self, transcript_filename):
         self.session_manager.open_transcript(transcript_filename)
         self.segment_manager.open_transcript(self.session_data.transcript)
         session_name = self.utils.get_session_name()
         self.save_session(session_name)
-        self.view.open_transcript(session_name, self.session_data, self.segment_data)
+        self.view.update_for_open_transcript(
+            session_name, self.session_data, self.segment_data
+        )
 
     def open_audiofile(self, audio_filename):
         self.session_data.audio_filename = audio_filename
         self.audio_player.load_audio_file(audio_filename)
         self.save_session(self.utils.get_session_name())
-        self.view.open_audio()
+        self.view.activate_audio_controls()
 
-    def increment_index(self):
-        new_index = self.segment_data.curr_index + 1
+    def change_segment_by_delta(self, delta):
+        new_index = self.segment_data.curr_index + delta
         transcript = self.session_data.transcript
         self.segment_manager.change_segment(transcript, new_index)
         self.save_session(self.utils.get_session_name())
-        self.view.change_segment(self.segment_data)
+        self.view.update_for_change_segment(self.segment_data)
         self.detect_overlap(self.segment_data.curr_index, transcript)
 
-    def decrement_index(self):
-        new_index = self.segment_data.curr_index - 1
-        transcript = self.session_data.transcript
-        self.segment_manager.change_segment(transcript, new_index)
-        self.save_session(self.utils.get_session_name())
-        self.view.change_segment(self.segment_data)
-        self.detect_overlap(self.segment_data.curr_index, transcript)
-
-    def change_segment_input_box(self, new_index):
-        transcript = self.session_data.transcript
-        self.segment_manager.change_segment(transcript, new_index)
-        self.save_session(self.utils.get_session_name())
-        self.view.change_segment(self.segment_data)
-        self.detect_overlap(self.segment_data.curr_index, transcript)
+    def go_to_segment(self, new_index):
+        delta = new_index - self.segment_data.curr_index
+        self.change_segment_by_delta(delta)
 
     def delete_segment(self):
         transcript = self.session_data.transcript
         self.segment_manager.delete_segment(self.session_data, self.segment_data)
         self.segment_manager.change_segment(transcript, self.segment_data.curr_index)
         self.save_session(self.utils.get_session_name())
-        self.view.change_segment(self.segment_data)
+        self.view.update_for_change_segment(self.segment_data)
         self.detect_overlap(self.segment_data.curr_index, transcript)
 
     def save_session(self, session_name):
         self.utils.save_session(self.session_data, self.segment_data, session_name)
 
     def change_start_timestamp(self, delta):
-        self.segment_manager.change_start_timestamp(delta, self.segment_data)
-        self.segment_manager.update_window_timestamp(
-            self.segment_data,
-            self.segment_data.curr_segment.start,
-            self.segment_data.curr_segment.end,
-        )
+        self.segment_manager.change_timestamp(delta, self.segment_data, is_start=True)
+        self.segment_manager.update_window_timestamp_to_match_segment(self.segment_data)
 
     def change_end_timestamp(self, delta):
-        self.segment_manager.change_end_timestamp(delta, self.segment_data)
-        self.segment_manager.update_window_timestamp(
-            self.segment_data,
-            self.segment_data.curr_segment.start,
-            self.segment_data.curr_segment.end,
-        )
+        self.segment_manager.change_timestamp(delta, self.segment_data, is_start=False)
+        self.segment_manager.update_window_timestamp_to_match_segment(self.segment_data)
 
     def save_timestamp_edits(self):
-        self.segment_manager.copy_timstamp_edits_to_transcript(
-            self.segment_data, self.session_data
+        transcript = self.session_data.transcript
+        self.segment_manager.copy_timestamp_edits_to_transcript(
+            self.segment_data, transcript
         )
         self.save_session(self.utils.get_session_name())
         self.view.update_timestamp_labels(self.segment_data)
         self.detect_overlap(self.segment_data.curr_index, self.session_data.transcript)
 
     def play_audio_segment(self):
-        print('play')
+        print("play")
 
     def data_dump(self):
         print(f"Index = {self.segment_data.curr_index}")
