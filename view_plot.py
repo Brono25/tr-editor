@@ -14,11 +14,15 @@ class PlotFrame:
         self.plot_canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         plt.xlabel("Seconds", fontsize=6)
 
+
     def plot_audio(self, x=None, y=None):
         self.plot_ax.clear()
-        if x is not None and y is not None:
+        if x is not None and y is not None and len(x) > 0: 
             self.plot_ax.plot(x, y)
+            self.plot_ax.set_xlim(x[0], x[-1])  
         else:
             self.plot_ax.plot([])
+
         self.plot_ax.set_ylim(-1, 1)
         self.plot_canvas.draw()
+

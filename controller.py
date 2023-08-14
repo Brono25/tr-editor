@@ -127,8 +127,7 @@ class Controller:
         end = self.segment_data.window.end
         zoom_level = self.segment_data.window.zoom_scaler
         if not start and not end:
-            start = 0
-            end = 0
+            start, end = 0, 0
         y, x = self.audio_player.get_audio_time_vectors(start, end)
         self.view.plot_audio(x, y / zoom_level)
 
