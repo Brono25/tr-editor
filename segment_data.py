@@ -67,6 +67,8 @@ class SegmentData:
         self.prev_index = None
         self.next_index = 1
         self.num_segments = 0
+        self.overlap_status = None
+        self.overlap_timestamp = None
         self.window = Window()
         self.curr_segment = Segment()
         self.prev_segment = Segment()
@@ -78,6 +80,8 @@ class SegmentData:
             "prev_index": self.prev_index,
             "next_index": self.next_index,
             "num_segments": self.num_segments,
+            "overlap_status": self.overlap_status,
+            "overlap_timestamp": self.overlap_timestamp,
             "window": self.window.to_dict(),
             "curr_segment": self.curr_segment.to_dict(),
             "prev_segment": self.prev_segment.to_dict(),
@@ -89,6 +93,8 @@ class SegmentData:
         self.prev_index = data.get("prev_index")
         self.next_index = data.get("next_index")
         self.num_segments = data.get("num_segments")
+        self.overlap_status = data.get("overlap_status")
+        self.overlap_timestamp = data.get("overlap_timestamp")
         window_data = data.get("window", {})
         self.window.update_from_dict(window_data)
         segment_data = data.get("curr_segment", {})
@@ -103,6 +109,8 @@ class SegmentData:
         self.prev_index = None
         self.next_index = 1
         self.num_segments = 0
+        self.overlap_status = None
+        self.overlap_timestamp = None
         self.window.reset()
         self.curr_segment.reset()
         self.prev_segment.reset()

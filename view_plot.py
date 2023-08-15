@@ -33,3 +33,8 @@ class PlotFrame:
             self.plot_ax.axvline(x=end_time, color='red')
             self.plot_canvas.draw()
 
+    def plot_overlapped_line(self, x_value, color='lightgrey'):
+        if x_value is not None:
+            self.plot_ax.axvline(x=x_value, color=color)
+            self.plot_canvas.draw()
+        

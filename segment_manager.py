@@ -118,3 +118,24 @@ class SegmentManager:
         segment_data.window.end = segment_data.curr_segment.end
         segment_data.window.normaliser = max_value
         segment_data.window.zoom_scaler = 1
+
+
+    def update_overlap_status(self, segment_data, transcript):
+        curr_index = segment_data.curr_index
+        timestamp, status = self._detect_overlap(curr_index, transcript)
+        segment_data.overlap_status = status
+        segment_data.overlap_timestamp = timestamp
+
+    def _detect_overlap(self, curr_index, transcript):
+        if not transcript:
+            return (None, None)
+        curr_start, _, curr_label, _, _ = transcript[curr_index]
+        for index in range(curr_index - 1, -1, -1):
+            start, end, label, language, text = transcript[index]
+
+            if label == curr_label:
+                if end >= curr_start:
+                    status = f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
+                    return (end, status)
+        else:
+            return (None, None)

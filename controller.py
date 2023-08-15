@@ -74,8 +74,10 @@ class Controller:
         new_index = self.segment_data.curr_index + delta
         transcript = self.session_data.transcript
         self.segment_manager.change_segment(transcript, new_index)
+        self.segment_manager.update_overlap_status(self.segment_data, transcript)
         self.save_session(self.utils.get_session_name())
         self.view.update_for_change_segment(transcript, self.segment_data, self.audio_player)
+ 
         self.audio_player.play_audio(
             self.segment_data.window.start, self.segment_data.window.end
         )
@@ -144,9 +146,12 @@ class Controller:
         self.segment_manager.copy_timestamp_edits_to_transcript(
             self.segment_data, transcript
         )
+        self.segment_manager.update_window_timestamp(self.segment_data)
+        self.segment_manager.update_overlap_status(self.segment_data, transcript)
         self.save_session(self.utils.get_session_name())
         self.view.update_for_save_timestamp_edits(self.segment_data, transcript, curr_index)
+        self.view.update_plot(self.segment_data, self.audio_player)
       
 
-
+    
 

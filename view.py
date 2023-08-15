@@ -99,7 +99,7 @@ class View:
         self.segment_ctrl.update_text_input(curr_index)
         self.segment_ctrl.update_line_count_label(len(transcript))
         self.update_button_state(session_data, segment_data, audio_player)
-        self.display_overlap_status(curr_index, transcript)
+        self.text_ctrl.update_overlaps_label(segment_data.overlap_status)
         if not session_data.audio_filename:
             self.clear_plot()
 
@@ -127,7 +127,7 @@ class View:
         self.segment_ctrl.update_line_count_label(len(transcript))
         self.segment_ctrl.update_text_input(curr_index)
         self.update_button_state(session_data, segment_data, audio_player)
-        self.display_overlap_status(curr_index, transcript)
+        self.text_ctrl.update_overlaps_label(segment_data.overlap_status)
         if audio_player.audio_obj:
             self.update_plot(segment_data, audio_player)
 
@@ -139,11 +139,11 @@ class View:
         self.segment_ctrl.update_line_count_label(num_segments)
         self.segment_ctrl.update_segment_control_buttons(num_segments)
         self.update_plot(segment_data, audio_player)
-        self.display_overlap_status(curr_index, transcript)
+        self.text_ctrl.update_overlaps_label(segment_data.overlap_status)
 
     def update_for_save_timestamp_edits(self, segment_data, transcript, curr_index):
-        self.view.update_timestamp_labels(segment_data)
-        self.display_overlap_status(curr_index, transcript)
+        self.update_timestamp_labels(segment_data)
+        self.text_ctrl.update_overlaps_label(segment_data.overlap_status)
 
     def play_audio_button(self):
         self.controller.play_audio_segment()
@@ -158,26 +158,22 @@ class View:
     def update_timestamp_labels(self, segment_data):
         self.text_ctrl.update_text(segment_data)
 
-    def plot_audio(self, x, y):
-        self.plot_ctrl.plot_audio(x, y)
-
-    def plot_segment_bounds(self, start, end):
-        self.plot_ctrl.plot_segment_bounds(start, end)
 
     def clear_plot(self):
         self.plot_ctrl.plot_audio()
 
     def update_plot(self, segment_data, audio_player):
-        start = segment_data.window.start
-        end = segment_data.window.end
+        w_start = segment_data.window.start
+        w_end = segment_data.window.end
+        seg_start = segment_data.curr_segment.start
+        seg_end = segment_data.curr_segment.end
         zoom_level = segment_data.window.zoom_scaler
-        if not start and not end:
-            start, end = 0, 0
-        y, x = audio_player.get_audio_time_vectors(start, end)
-        self.plot_audio(x, y / zoom_level)
-        self.plot_segment_bounds(
-            segment_data.curr_segment.start, segment_data.curr_segment.end
-        )
+        if not w_start and not w_end:
+            w_start, w_end = 0, 0
+        y, x = audio_player.get_audio_time_vectors(w_start, w_end)
+        self.plot_ctrl.plot_audio(x, y / zoom_level)
+        self.plot_ctrl.plot_segment_bounds(seg_start, seg_end)
+        self.plot_ctrl.plot_overlapped_line(segment_data.overlap_timestamp)
 
     def update_button_state(self, session_data, segment_data, audio_player):
         if not audio_player.audio_obj:
@@ -202,20 +198,3 @@ class View:
         self.window_ctrl.deactivate_buttons()
         self.segment_ctrl.deactivate_play_stop_buttons()
         self.segment_ctrl.deactivate_segment_control_buttons()
-
-    def display_overlap_status(self, curr_index, transcript):
-        overlap_status = self._detect_overlap(curr_index, transcript)
-        self.text_ctrl.update_overlaps_label(overlap_status)
-
-    def _detect_overlap(self, curr_index, transcript):
-        if not transcript:
-            return
-        curr_start, _, curr_label, _, _ = transcript[curr_index]
-        for index in range(curr_index - 1, -1, -1):
-            start, end, label, language, text = transcript[index]
-
-            if label == curr_label:
-                if end >= curr_start:
-                    return f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
-        else:
-            return None
