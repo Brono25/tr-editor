@@ -26,17 +26,15 @@ class Controller:
     def open_session(self, session_name):
         self.utils.set_session_name(session_name)
         if self.session_manager.open_session(session_name):
+            
             self.segment_manager.open_session(session_name)
             self.view.update_for_open_session(
                 session_name, self.session_data, self.segment_data, self.audio_player
             )
-            self.detect_overlap(
-                self.segment_data.curr_index, self.session_data.transcript
-            )
+
         if (audio_filename := self.session_data.audio_filename) is not None:
             self.open_audiofile(audio_filename)
-        else:
-            self.view.clear_plot()
+
 
     def new_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -70,16 +68,14 @@ class Controller:
         self.view.update_for_open_transcript(
             session_name, self.session_data, self.segment_data, self.audio_player
         )
-        self.view.update_plot(self.segment_data, self.audio_player)
+        
 
     def change_segment_by_delta(self, delta):
         new_index = self.segment_data.curr_index + delta
         transcript = self.session_data.transcript
         self.segment_manager.change_segment(transcript, new_index)
         self.save_session(self.utils.get_session_name())
-        self.view.update_for_change_segment(self.segment_data)
-        self.detect_overlap(self.segment_data.curr_index, transcript)
-        self.view.update_plot(self.segment_data, self.audio_player)
+        self.view.update_for_change_segment(transcript, self.segment_data, self.audio_player)
         self.audio_player.play_audio(
             self.segment_data.window.start, self.segment_data.window.end
         )
@@ -107,9 +103,6 @@ class Controller:
             Debug.print_session_data(self.segment_data, f"{session_name} segment data:")
             Debug.print_session_data(self.session_data, f"{session_name} session data:")
 
-    def detect_overlap(self, curr_index, transcript):
-        overlap_status = self.segment_manager.detect_overlap(curr_index, transcript)
-        self.view.update_overlaps_label(overlap_status)
 
     def zoom_plot(self, delta):
         zoom_min, zoom_max = 0.1, 2
@@ -147,12 +140,13 @@ class Controller:
 
     def save_timestamp_edits(self):
         transcript = self.session_data.transcript
+        curr_index = self.segment_data.curr_index
         self.segment_manager.copy_timestamp_edits_to_transcript(
             self.segment_data, transcript
         )
         self.save_session(self.utils.get_session_name())
-        self.view.update_timestamp_labels(self.segment_data)
-        self.detect_overlap(self.segment_data.curr_index, self.session_data.transcript)
+        self.view.update_for_save_timestamp_edits(self.segment_data, transcript, curr_index)
+      
 
 
 

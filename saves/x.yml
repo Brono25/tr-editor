@@ -1,16 +1,16 @@
 segment_data:
-  curr_index: 3
-  prev_index: 2
-  next_index: 4
+  curr_index: 4
+  prev_index: 3
+  next_index: 5
   num_segments: 8
   window:
-    start: 2.18
-    end: 3.24
-    zoom_scaler: 0.1
-    normaliser: null
+    start: 1.4300000000000002
+    end: 2.49
+    zoom_scaler: 1
+    normaliser: 1
   curr_segment:
-    start: 2.18
-    end: 2.24
+    start: 1.6800000000000002
+    end: 2.49
     label: VAL
     text: mhm
     language: ENG
@@ -30,6 +30,11 @@ session_data:
   audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
   transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09.tr
   transcript:
+  - - 0.47
+    - 2.107
+    - KAY
+    - ENG
+    - '!so'
   - - 0.471
     - 2.106
     - KAY
@@ -45,8 +50,8 @@ session_data:
     - KAY
     - SPA
     - "!ah\xED@s"
-  - - 2.18
-    - 2.24
+  - - 1.6800000000000002
+    - 2.49
     - VAL
     - ENG
     - mhm
@@ -55,11 +60,6 @@ session_data:
     - KAY
     - SPA
     - "donde los polic\xEDas e practican"
-  - - 4.293
-    - 7.486
-    - KAY
-    - SPA
-    - "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
   - - 4.294
     - 7.485
     - KAY

@@ -16,11 +16,13 @@ class SessionManager:
 
     def _load_session_data_from_savefile(self, session_name):
         try:
+            
             with open(session_name, "r") as file:
                 session_data_dict = yaml.safe_load(file)
                 self.session_data.update_from_dict(session_data_dict["session_data"])
             return True
         except (FileNotFoundError, yaml.YAMLError, KeyError):
+            print("Error: file not opened")
             return False
 
     def _load_transcript(self, transcript_filename):

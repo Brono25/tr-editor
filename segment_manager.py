@@ -92,18 +92,6 @@ class SegmentManager:
 
         return prev_index, curr_index, next_index
 
-    def detect_overlap(self, curr_index, transcript):
-        if not transcript:
-            return
-        curr_start, _, curr_label, _, _ = transcript[curr_index]
-        for index in range(curr_index - 1, -1, -1):
-            start, end, label, language, text = transcript[index]
-
-            if label == curr_label:
-                if end >= curr_start:
-                    return f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
-        else:
-            return None
 
     def change_timestamp(self, delta, segment_data, duration, is_start):
         curr_start = segment_data.curr_segment.start

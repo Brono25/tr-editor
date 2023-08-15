@@ -89,24 +89,29 @@ class View:
     def update_for_open_session(
         self, session_name, session_data, segment_data, audio_player
     ):
+        curr_index = segment_data.curr_index
         transcript = session_data.transcript
         self.segment_ctrl.update_segment_control_buttons(len(transcript))
         self._update_session_labels(session_name, session_data)
         self.session_ctrl.activate_open_buttons()
         self.segment_ctrl.update_play_stop_buttons(session_data.audio_filename)
         self.text_ctrl.update_text(segment_data)
-        self.segment_ctrl.update_text_input(segment_data.curr_index)
+        self.segment_ctrl.update_text_input(curr_index)
         self.segment_ctrl.update_line_count_label(len(transcript))
         self.update_button_state(session_data, segment_data, audio_player)
+        self.display_overlap_status(curr_index, transcript)
+        if not session_data.audio_filename:
+            self.clear_plot()
 
     def update_for_new_session(
         self, session_name, segment_data, session_data, audio_player
     ):
+        transcript = session_data.transcript
         self._update_session_labels(session_name, session_data)
         self.text_ctrl.update_text(segment_data)
         self.update_button_state(session_data, segment_data, audio_player)
         self.session_ctrl.activate_open_buttons()
-        self.segment_ctrl.update_line_count_label(len(session_data.transcript))
+        self.segment_ctrl.update_line_count_label(len(transcript))
         self.segment_ctrl.update_text_input()
         self.text_ctrl.update_overlaps_label(None)
         self.clear_plot()
@@ -114,20 +119,31 @@ class View:
     def update_for_open_transcript(
         self, session_name, session_data, segment_data, audio_player
     ):
+        curr_index = segment_data.curr_index
+        transcript = session_data.transcript
         self._update_session_labels(session_name, session_data)
-        self.segment_ctrl.update_segment_control_buttons(len(session_data.transcript))
+        self.segment_ctrl.update_segment_control_buttons(len(transcript))
         self.text_ctrl.update_text(segment_data)
-        self.segment_ctrl.update_line_count_label(len(session_data.transcript))
-        self.segment_ctrl.update_text_input(segment_data.curr_index)
+        self.segment_ctrl.update_line_count_label(len(transcript))
+        self.segment_ctrl.update_text_input(curr_index)
         self.update_button_state(session_data, segment_data, audio_player)
+        self.display_overlap_status(curr_index, transcript)
         if audio_player.audio_obj:
             self.update_plot(segment_data, audio_player)
 
-    def update_for_change_segment(self, segment_data):
+    def update_for_change_segment(self, transcript, segment_data, audio_player):
+        curr_index = segment_data.curr_index
+        num_segments = segment_data.num_segments
         self.text_ctrl.update_text(segment_data)
-        self.segment_ctrl.update_text_input(segment_data.curr_index)
-        self.segment_ctrl.update_line_count_label(segment_data.num_segments)
-        self.segment_ctrl.update_segment_control_buttons(segment_data.num_segments)
+        self.segment_ctrl.update_text_input(curr_index)
+        self.segment_ctrl.update_line_count_label(num_segments)
+        self.segment_ctrl.update_segment_control_buttons(num_segments)
+        self.update_plot(segment_data, audio_player)
+        self.display_overlap_status(curr_index, transcript)
+
+    def update_for_save_timestamp_edits(self, segment_data, transcript, curr_index):
+        self.view.update_timestamp_labels(segment_data)
+        self.display_overlap_status(curr_index, transcript)
 
     def play_audio_button(self):
         self.controller.play_audio_segment()
@@ -138,9 +154,6 @@ class View:
         self.session_ctrl.update_transcript_label(transcript_name)
         self.session_ctrl.update_session_label(session_name)
         self.session_ctrl.update_audiofile_label(audio_name)
-
-    def update_overlaps_label(self, overlap_text):
-        self.text_ctrl.update_overlaps_label(overlap_text)
 
     def update_timestamp_labels(self, segment_data):
         self.text_ctrl.update_text(segment_data)
@@ -189,3 +202,20 @@ class View:
         self.window_ctrl.deactivate_buttons()
         self.segment_ctrl.deactivate_play_stop_buttons()
         self.segment_ctrl.deactivate_segment_control_buttons()
+
+    def display_overlap_status(self, curr_index, transcript):
+        overlap_status = self._detect_overlap(curr_index, transcript)
+        self.text_ctrl.update_overlaps_label(overlap_status)
+
+    def _detect_overlap(self, curr_index, transcript):
+        if not transcript:
+            return
+        curr_start, _, curr_label, _, _ = transcript[curr_index]
+        for index in range(curr_index - 1, -1, -1):
+            start, end, label, language, text = transcript[index]
+
+            if label == curr_label:
+                if end >= curr_start:
+                    return f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
+        else:
+            return None

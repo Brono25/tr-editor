@@ -27,7 +27,7 @@ class AudioPlayer:
         try:
             self.audio_obj = AudioSegment.from_file(path)
             samples = np.array(self.audio_obj.get_array_of_samples())
-            self.audio_info.peak_amplitude = np.max(np.abs(samples))
+            self.audio_info.peak_amplitude = float(np.max(np.abs(samples)))
             self.audio_info.duration = self.audio_obj.duration_seconds
             self.audio_info.sample_rate = self.audio_obj.frame_rate
             print(f"{os.path.basename(path)} successfully loaded")
