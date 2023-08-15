@@ -51,10 +51,13 @@ class Controller:
         self.session_manager.open_transcript(transcript_filename)
         self.segment_manager.open_transcript(self.session_data.transcript)
         session_name = self.utils.get_session_name()
+        normaliser = self.audio_player.audio_info.peak_amplitude
+        self.segment_manager.initialise_window_data(self.segment_data, normaliser)
         self.save_session(session_name)
         self.view.update_for_open_transcript(
             session_name, self.session_data, self.segment_data, self.audio_player
         )
+
 
     def open_audiofile(self, audio_filename):
         session_name = self.utils.get_session_name()
