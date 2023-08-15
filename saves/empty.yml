@@ -1,47 +1,67 @@
 segment_data:
-  curr_index: 2
-  prev_index: 1
-  next_index: 3
-  num_segments: 5
+  curr_index: 0
+  prev_index: null
+  next_index: 1
+  num_segments: 9
   window:
-    start: 0
-    end: 5
+    start: 0.6000000000000001
+    end: 1.1
     zoom_scaler: 1
     normaliser: null
   curr_segment:
-    start: 0
-    end: 5
+    start: 0.6000000000000001
+    end: 1.1
     label: KAY
-    text: "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
-    language: SPA
+    text: '!so'
+    language: ENG
   prev_segment:
-    start: 0.5750000000000002
-    end: 0.8309999999999985
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
+  next_segment:
+    start: 0.471
+    end: 2.106
     label: KAY
     text: "!s\xED@s hay@s un@s"
     language: SPA
-  next_segment:
-    start: 4.294
-    end: 7.485
-    label: KAY
-    text: '!trainees the police trainees'
-    language: ENG
 session_data:
   audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
   transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09.tr
   transcript:
-  - - 0
-    - 7.857
+  - - 0.6000000000000001
+    - 1.1
     - KAY
     - ENG
     - '!so'
-  - - 0.5750000000000002
-    - 0.8309999999999985
+  - - 0.471
+    - 2.106
     - KAY
     - SPA
     - "!s\xED@s hay@s un@s"
-  - - 0
-    - 5
+  - - 0.472
+    - 2.105
+    - KAY
+    - ENG
+    - '!range'
+  - - 0.473
+    - 2.104
+    - KAY
+    - SPA
+    - "!ah\xED@s"
+  - - 2.18
+    - 2.49
+    - VAL
+    - ENG
+    - mhm
+  - - 2.181
+    - 4.321
+    - KAY
+    - SPA
+    - "donde los polic\xEDas e practican"
+  - - 4.293
+    - 7.486
     - KAY
     - SPA
     - "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"

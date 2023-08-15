@@ -27,11 +27,10 @@ class SegmentManager:
 
     def change_segment(self, transcript, new_index):
         p, c, n = self._get_prev_curr_next_indexes(new_index, len(transcript))
-        self._load_segment(transcript, p, c, n)
+        self._update_segment(transcript, p, c, n)
         start = self.segment_data.curr_segment.start
         end = self.segment_data.curr_segment.end
         self._set_window_bounds(start, end)
-        
 
     def _load_segment_data_from_savefile(self, session_name):
         try:
@@ -58,12 +57,12 @@ class SegmentManager:
             ]
             self.segment_data.window = Window(segment_start, segment_end)
 
-    def _load_segment(self, transcript, prev_index, curr_index, next_index):
+    def _update_segment(self, transcript, prev_index, curr_index, next_index):
         self.segment_data.prev_index = prev_index
         self.segment_data.curr_index = curr_index
         self.segment_data.next_index = next_index
         self.segment_data.num_segments = len(transcript)
-        zoom_scaler = self.segment_data.window.zoom_scaler 
+        zoom_scaler = self.segment_data.window.zoom_scaler
         if transcript:
             self.segment_data.curr_segment = Segment(*transcript[curr_index])
 
@@ -84,8 +83,6 @@ class SegmentManager:
     def _set_window_bounds(self, start, end):
         self.segment_data.window.start = start
         self.segment_data.window.end = end
-
-
 
     def _get_prev_curr_next_indexes(self, index, num_segments):
         index = max(0, min(index, num_segments - 1))
@@ -108,16 +105,15 @@ class SegmentManager:
         else:
             return None
 
-    def change_timestamp(self, delta, segment_data, is_start):
+    def change_timestamp(self, delta, segment_data, duration, is_start):
         curr_start = segment_data.curr_segment.start
         curr_end = segment_data.curr_segment.end
-        num_segments = segment_data.num_segments
 
         if is_start:
             new_start = max(0, min(curr_end, curr_start + delta))
             segment_data.curr_segment.start = new_start
         else:
-            new_end = max(curr_start, min(num_segments, curr_end + delta))
+            new_end = max(curr_start, min(duration, curr_end + delta))
             segment_data.curr_segment.end = new_end
 
     def update_window_timestamp(self, segment_data):

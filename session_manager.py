@@ -1,8 +1,4 @@
-from audio_player import AudioPlayer
 import yaml
-import os
-
-# controlls the io of sessionsession_data
 
 
 class SessionManager:
@@ -14,7 +10,7 @@ class SessionManager:
 
     def new_session(self):
         self.session_data.reset()
-    
+
     def open_transcript(self, transcript_filename):
         self._load_transcript(transcript_filename)
 
@@ -37,5 +33,43 @@ class SessionManager:
                     start, end, label, language, text = line.split("|")
                     element = [float(start), float(end), label, language, text]
                     self.session_data.transcript.append(element)
-    
-  
+
+    def trim_transcript(self, trim_start, trim_end, transcript):
+        result = []
+        offset = trim_end - trim_start
+
+        for seg in transcript:
+            seg_start, seg_end, speaker, lang, text = seg
+
+            action = self._trim_type(trim_start, trim_end, seg_start, seg_end)
+            if action == "delete":
+                continue
+            elif action == "trim_middle":
+                result.append([seg_start, seg_end - offset, speaker, lang, text])
+            elif action == "trim_start":
+                result.append(
+                    [trim_end - offset, seg_end - offset, speaker, lang, text]
+                )
+            elif action == "trim_end":
+                result.append([seg_start, trim_start, speaker, lang, text])
+            elif seg_start >= trim_end:
+                result.append(
+                    [seg_start - offset, seg_end - offset, speaker, lang, text]
+                )
+            else:
+                result.append(seg)
+        return result
+
+    def _trim_type(self, trim_start, trim_end, seg_start, seg_end):
+        if trim_end <= trim_start or seg_end <= seg_start:
+            raise ValueError("Invalid Range: end time must be greater than start time.")
+        if trim_start >= seg_end or trim_end <= seg_start:
+            return None
+        if trim_start <= seg_start and trim_end >= seg_end:
+            return "delete"
+        elif trim_start > seg_start and trim_end < seg_end:
+            return "trim_middle"
+        elif trim_start <= seg_start and trim_end < seg_end:
+            return "trim_start"
+        elif trim_start > seg_start and trim_end >= seg_end:
+            return "trim_end"

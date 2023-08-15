@@ -95,5 +95,5 @@ class AudioPlayer:
         end_ms = end * 1000
         audio_slice = self.audio_obj[start_ms:end_ms]
         samples = np.array(audio_slice.get_array_of_samples())
-        time_vector = np.arange(len(samples)) / audio_slice.frame_rate
+        time_vector = np.linspace(start, end, len(samples))
         return samples / self.audio_info.peak_amplitude, time_vector

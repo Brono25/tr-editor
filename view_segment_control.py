@@ -8,6 +8,7 @@ class SegmentControlFrame:
 
         self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
+        
 
         label_change_segment = tk.Label(self.frame, text="Change Segment Index")
         label_change_segment.grid(row=0, column=2, columnspan=3)
@@ -35,10 +36,10 @@ class SegmentControlFrame:
 
         self.right_arrow_button = tk.Button(
             self.frame,
-            text="\u2192",
+                text="\u2192",
             command=lambda: self.parent.call_function("increment_index"),
             state=tk.DISABLED,
-)
+        )
         self.right_arrow_button.grid(row=1, column=3)
 
         self.text_box_input = tk.Entry(self.frame, width=5, state=tk.DISABLED)

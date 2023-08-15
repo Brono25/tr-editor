@@ -26,3 +26,10 @@ class PlotFrame:
         self.plot_ax.set_ylim(-1, 1)
         self.plot_canvas.draw()
 
+
+    def plot_segment_bounds(self, start_time, end_time):
+        if start_time and end_time:
+            self.plot_ax.axvline(x=start_time, color='red')
+            self.plot_ax.axvline(x=end_time, color='red')
+            self.plot_canvas.draw()
+
