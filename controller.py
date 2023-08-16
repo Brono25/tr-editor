@@ -14,15 +14,16 @@ from view import View
 
 class Controller:
     def __init__(self):
+        self.view = View(self)
+        self.console = self.view.console
         self.session_data = SessionData()
         self.segment_data = SegmentData()
         self.window_data = WindowData()
-        self.session_manager = SessionManager(self.session_data)
-        self.segment_manager = SegmentManager(self.segment_data)
+        self.session_manager = SessionManager(self.session_data, self.console)
+        self.segment_manager = SegmentManager(self.segment_data, self.console)
         self.window_manager = WindowManager(self.window_data)
         self.utils = Utilities()
-        self.view = View(self)
-        self.audio_player = AudioPlayer()
+        self.audio_player = AudioPlayer(self.console)
 
         if session_name := self.utils.get_session_name():
             self.open_session(session_name)
@@ -42,6 +43,7 @@ class Controller:
 
         if (audio_filename := self.session_data.audio_filename) is not None:
             self.open_audiofile(audio_filename)
+        self.console.clear()
 
     def new_session(self, session_name):
         self.audio_player.reset()
@@ -53,6 +55,7 @@ class Controller:
         self.view.update_for_new_session(
             session_name, self.segment_data, self.session_data, self.audio_player
         )
+        self.console.clear()
 
     def open_transcript(self, transcript_filename):
         self.session_manager.import_transcript(transcript_filename)

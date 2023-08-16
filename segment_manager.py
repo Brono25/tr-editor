@@ -3,8 +3,9 @@ from segment_data import Segment
 
 
 class SegmentManager:
-    def __init__(self, segment_data):
+    def __init__(self, segment_data, console):
         self.segment_data = segment_data
+        self.console = console
 
     def new_session(self):
         self.segment_data.reset()
@@ -15,7 +16,7 @@ class SegmentManager:
         curr_index = segment_data.curr_index
         transcript = session_data.transcript
         start, end, label, language, text = transcript.pop(curr_index)
-        print(
+        self.console.log(
             f"Removed line {curr_index}: ({start}, {end}) {label}, {language}, {text}"
         )
 

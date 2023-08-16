@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class ConsoleFrame:
+class Console:
     def __init__(self, parent):
         self.frame = tk.Frame(parent.root)
         self.frame.pack(expand=tk.YES, fill=tk.BOTH)

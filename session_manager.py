@@ -2,9 +2,9 @@ import yaml
 
 
 class SessionManager:
-    def __init__(self, session_data):
+    def __init__(self, session_data, console):
         self.session_data = session_data
-
+        self.console = console
 
     def new_session(self):
         self.session_data.reset()
@@ -16,7 +16,7 @@ class SessionManager:
                 self.session_data.update_from_dict(session_data_dict["session_data"])
             return True
         except (FileNotFoundError, yaml.YAMLError, KeyError):
-            print("Error: file not opened")
+            self.console.log("Error: file not opened")
             return False
 
     def import_transcript(self, transcript_filename):

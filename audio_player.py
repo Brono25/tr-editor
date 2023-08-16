@@ -17,12 +17,13 @@ class AudioInfo:
 
 
 class AudioPlayer:
-    def __init__(self):
+    def __init__(self, console):
         self.audio_obj = None
         self.audio_info = AudioInfo()
         self._stop_flag = False
         self._play_thread = None
-
+        self.console = console
+        
     def load_audio_file(self, path):
         try:
             self.audio_obj = AudioSegment.from_file(path)
@@ -30,14 +31,14 @@ class AudioPlayer:
             self.audio_info.peak_amplitude = float(np.max(np.abs(samples)))
             self.audio_info.duration = self.audio_obj.duration_seconds
             self.audio_info.sample_rate = self.audio_obj.frame_rate
-            print(f"{os.path.basename(path)} successfully loaded")
+            self.console.log(f"{os.path.basename(path)} successfully loaded")
         except Exception as e:
-            print(f"An error occurred while loading the audio file: {e}")
+            self.console.log(f"An error occurred while loading the audio file: {e}")
             return None
 
     def play_audio(self, start, end, skip_start=0, skip_end=0):
         if not self.audio_obj:
-            print("Error: No audio loaded.")
+            self.console.log("Error: No audio loaded.")
             return
 
         self.stop_audio()

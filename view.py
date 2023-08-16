@@ -9,7 +9,7 @@ from view_segment_control import SegmentControlFrame
 from view_session_control import SessionControlFrame
 from view_text import TextFrame
 from view_window_control import WindowControlFrame
-from view_console import ConsoleFrame
+from view_console import Console
 
 DELTA = 250 / 1000
 SDELTA = 25 / 1000
@@ -31,10 +31,7 @@ class View:
         self.segment_ctrl = SegmentControlFrame(self)
         self.window_ctrl = WindowControlFrame(self)
         self.plot_ctrl = PlotFrame(self)
-        self.console = ConsoleFrame(self)
-        for i in range(100):
-            self.console.log("This is a log message.")
-    
+        self.console = Console(self)
 
         self.function_map = {
             # Session Management
@@ -90,7 +87,7 @@ class View:
         if func:
             func(*default_args, *args)
         else:
-            print(f"Function {function_name} not found.")
+            self.console.log(f"Function {function_name} not found.")
 
     def run(self):
         self.root.mainloop()
@@ -128,7 +125,6 @@ class View:
         self.update_button_state(session_data, segment_data, audio_player)
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.segment_ctrl.set_input_text_box_label()
-        self.text_ctrl.update_overlaps_label(None)
         self.clear_plot()
 
     def update_for_open_transcript(
@@ -191,7 +187,7 @@ class View:
         y, x = audio_player.get_audio_time_vectors(w_start, w_end)
         self.plot_ctrl.plot_audio(x, y / zoom_level)
         self.plot_ctrl.plot_segment_bounds(start_marker, end_marker)
-        #self.plot_ctrl.plot_overlapped_line(segment_data.overlap_timestamp)
+        
 
     def update_button_state(self, session_data, segment_data, audio_player):
 
