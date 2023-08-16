@@ -5,10 +5,10 @@ import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from views.view_plot import PlotFrame
-from views.view_segment_control import SegmentControlFrame
-from views.view_session_control import SessionControlFrame
+from views.view_segment import SegmentControlFrame
+from views.view_session import SessionControlFrame
 from views.view_text import TextFrame
-from views.view_window_control import WindowControlFrame
+from views.view_window import WindowControlFrame
 from views.view_console import Console
 
 DELTA = 250 / 1000
@@ -176,11 +176,19 @@ class View:
         start_marker = window_data.start_marker
         end_marker = window_data.end_marker
         zoom_level = window_data.zoom_scaler
+        prev_marker = window_data.prev_marker
         if not w_start and not w_end:
             w_start, w_end = 0, 0
         y, x = audio_player.get_audio_time_vectors(w_start, w_end)
         self.plot_ctrl.plot_audio(x, y / zoom_level)
-        self.plot_ctrl.plot_segment_bounds(start_marker, end_marker)
+
+        self.plot_ctrl.plot_vertical_line(start_marker)
+        self.plot_ctrl.plot_vertical_line(end_marker)
+
+        self.plot_ctrl.plot_vertical_line(window_data.prev_marker,  color='lightblue', linestyle='dashed', label='x1')
+        self.plot_ctrl.plot_vertical_line(window_data.next_marker,  color='#FF6F61', linestyle='dashed',  label='x2')
+
+    
 
     def update_button_state(self, session_data, segment_data, audio_player):
         if session_data:

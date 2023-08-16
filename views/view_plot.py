@@ -27,14 +27,9 @@ class PlotFrame:
         self.plot_canvas.draw()
 
 
-    def plot_segment_bounds(self, start_time, end_time):
-        if start_time and end_time:
-            self.plot_ax.axvline(x=start_time, color='red')
-            self.plot_ax.axvline(x=end_time, color='red')
+    def plot_vertical_line(self, x, color='black', linestyle='solid', linewidth=1.0, label=None):
+        if x:
+            self.plot_ax.axvline(x=x, color=color, linestyle=linestyle, linewidth=linewidth)
+            if label:
+                self.plot_ax.text(x, -0.95, label, fontsize=6, color=color)  
             self.plot_canvas.draw()
-
-    def plot_overlapped_line(self, x_value, color='lightgrey'):
-        if x_value is not None:
-            self.plot_ax.axvline(x=x_value, color=color)
-            self.plot_canvas.draw()
-        

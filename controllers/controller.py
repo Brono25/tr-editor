@@ -97,7 +97,7 @@ class Controller:
 
         self.segment_manager.change_segment(transcript, new_index)
         self.window_manager.reset_window_to_match_segment(self.segment_data)
-        self.save_session(session_name)
+       
         self.view.update_for_change_segment(
             self.segment_data, self.window_data, self.audio_player
         )
@@ -129,6 +129,7 @@ class Controller:
 
         self.view.update_labels_for_save_timestamp_edits(self.segment_data)
         self.view.update_plot(self.window_data, self.audio_player)
+        self.console.clear()
 
     # ======================================
     #              AUDIO
