@@ -1,7 +1,7 @@
 from session_manager import SessionManager
 
 def test_trim_types():
-    session_manager = SessionManager([])
+    session_manager = SessionManager([], None)
     trim_times = [
         ([1, 5, 1, 5], "delete"),
         ([0, 5, 1, 5], "delete"),

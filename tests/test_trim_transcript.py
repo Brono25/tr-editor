@@ -3,7 +3,7 @@ from session_manager import SessionManager
 
 
 def run_test(trim_start, trim_end, transcript, expected_result):
-    session_manager = SessionManager([])
+    session_manager = SessionManager([], None)
     trimmed = session_manager.trim_transcript(trim_start, trim_end, transcript)
 
     assert trimmed == expected_result, (
@@ -81,7 +81,7 @@ def test_trim_in_middle():
 
 
 def test_invalid_trim_range():
-    session_manager = SessionManager([])
+    session_manager = SessionManager([], None)
     transcript = [[1, 4, "BBB", "ENG", "two"]]
     trim_start = 2
     trim_end = 2

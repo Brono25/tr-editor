@@ -102,22 +102,17 @@ class SegmentManager:
         transcript[index][0] = new_start
         transcript[index][1] = new_end
 
-    def update_overlap_status(self, segment_data, transcript):
-        curr_index = segment_data.curr_index
-        timestamp, status = self._detect_overlap(curr_index, transcript)
-        segment_data.overlap_status = status
-        segment_data.overlap_timestamp = timestamp
 
-    def _detect_overlap(self, curr_index, transcript):
+    def detect_overlap(self, curr_index, transcript):
         if not transcript:
-            return (None, None)
+            return None
         curr_start, _, curr_label, _, _ = transcript[curr_index]
         for index in range(curr_index - 1, -1, -1):
-            start, end, label, language, text = transcript[index]
+            _, end, label, _, _ = transcript[index]
 
             if label == curr_label:
                 if end >= curr_start:
-                    status = f"Line {index}: ({start:.2f}, {end:.2f}) : {label} : {language} : {text}"
-                    return (end, status)
+                    status = f"Line {index} overlaps line {curr_index}"
+                    return status
         else:
-            return (None, None)
+            return None

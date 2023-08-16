@@ -92,9 +92,9 @@ class View:
     def run(self):
         self.root.mainloop()
 
-    #======================================
+    # ======================================
     #          UPDATE FOR BUTTON
-    #======================================
+    # ======================================
     def update_for_open_session(
         self, session_name, session_data, segment_data, audio_player
     ):
@@ -108,8 +108,7 @@ class View:
         self.segment_ctrl.set_input_text_box_label(curr_index)
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.update_button_state(session_data, segment_data, audio_player)
-        
-        
+
         if not session_data.audio_filename:
             self.clear_plot()
 
@@ -127,7 +126,7 @@ class View:
         self.segment_ctrl.set_input_text_box_label()
         self.clear_plot()
 
-    def update_for_open_transcript(
+    def update_for_open_file(
         self, session_name, session_data, segment_data, window_data, audio_player
     ):
         curr_index = segment_data.curr_index
@@ -139,7 +138,7 @@ class View:
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.segment_ctrl.set_input_text_box_label(curr_index)
         self.update_button_state(session_data, segment_data, audio_player)
-        
+
         if audio_player.audio_obj:
             self.update_plot(window_data, audio_player)
 
@@ -152,12 +151,8 @@ class View:
         self.segment_ctrl.set_total_num_segments_label(num_segments)
         self.update_plot(window_data, audio_player)
 
-
-        #
-
     def update_labels_for_save_timestamp_edits(self, segment_data):
         self.update_timestamp_labels(segment_data)
-        
 
     def play_audio_button(self):
         self.controller.play_audio_segment()
@@ -169,9 +164,8 @@ class View:
         self.session_ctrl.update_session_label(session_name)
         self.session_ctrl.update_audiofile_label(audio_name)
 
-    def update_timestamp_labels(self, segment_data): #XX 
+    def update_timestamp_labels(self, segment_data):  # XX
         self.text_ctrl.update_text(segment_data)
-
 
     def clear_plot(self):
         self.plot_ctrl.plot_audio()
@@ -187,10 +181,8 @@ class View:
         y, x = audio_player.get_audio_time_vectors(w_start, w_end)
         self.plot_ctrl.plot_audio(x, y / zoom_level)
         self.plot_ctrl.plot_segment_bounds(start_marker, end_marker)
-        
 
     def update_button_state(self, session_data, segment_data, audio_player):
-
         if session_data:
             self.session_ctrl.activate_open_buttons()
         if not audio_player.audio_obj:
@@ -219,5 +211,3 @@ class View:
         self.session_ctrl.update_audiofile_label(audio_filename)
         self.session_ctrl.update_transcript_label(transcript_filename)
         self.session_ctrl.update_session_label(session_name)
-
- 

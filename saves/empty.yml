@@ -1,38 +1,58 @@
 window_data:
-  start: null
-  end: null
-  start_marker: null
-  end_marker: null
+  start: 1.5
+  end: 3.5
+  start_marker: 1.5
+  end_marker: 3.5
   zoom_scaler: 1
-  normaliser: null
+  normaliser: 19625.0
   prev_marker: null
   next_marker: null
 segment_data:
-  curr_index: 0
-  prev_index: null
-  next_index: null
-  num_segments: 0
+  curr_index: 2
+  prev_index: 1
+  next_index: 3
+  num_segments: 4
   overlap_status: null
   overlap_timestamp: null
   curr_segment:
-    start: null
-    end: null
-    label: null
-    text: null
-    language: null
+    start: 1.5
+    end: 3.5
+    label: VAL
+    text: '!three'
+    language: ENG
   prev_segment:
-    start: null
-    end: null
-    label: null
-    text: null
-    language: null
+    start: 2.0
+    end: 3.0
+    label: KAY
+    text: two
+    language: SPA
   next_segment:
-    start: null
-    end: null
-    label: null
-    text: null
-    language: null
+    start: 3.0
+    end: 4.0
+    label: KAY
+    text: four
+    language: SPA
 session_data:
   audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09-2.tr
-  transcript: []
+  transcript_filename: /Users/brono/GitHub/tr-editer/saves/overlaps.tr
+  transcript:
+  - - 0.0
+    - 1.0
+    - KAY
+    - ENG
+    - one
+  - - 2.0
+    - 3.0
+    - KAY
+    - SPA
+    - two
+  - - 1.5
+    - 3.5
+    - VAL
+    - ENG
+    - '!three'
+  - - 3.0
+    - 4.0
+    - KAY
+    - SPA
+    - four

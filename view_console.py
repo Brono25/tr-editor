@@ -17,8 +17,11 @@ class Console:
         self.log_text['yscrollcommand'] = self.scrollbar.set
 
     def log(self, message):
-        self.log_text.insert(tk.END, message + '\n')
-        self.log_text.see(tk.END)  
+        if message:
+            self.log_text.insert(tk.END, message + '\n')
+            self.log_text.see(tk.END)  
+        else:
+            self.clear()
 
     def clear(self):
         self.log_text.delete(1.0, tk.END)

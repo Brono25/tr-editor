@@ -1,7 +1,3 @@
-
-
-
-
 class WindowData:
     def __init__(self, start=None, end=None, zoom_scaler=1):
         self.start = start
@@ -10,8 +6,8 @@ class WindowData:
         self.end_marker = None
         self.zoom_scaler = zoom_scaler
         self.normaliser = None
-        self.prev_marker = None 
-        self.next_marker = None  
+        self.prev_marker = None
+        self.next_marker = None
 
     def to_dict(self):
         return {

@@ -28,9 +28,9 @@ class Controller:
         if session_name := self.utils.get_session_name():
             self.open_session(session_name)
 
-    #======================================
+    # ======================================
     #              FILE IO
-    #======================================
+    # ======================================
 
     def open_session(self, session_name):
         self.utils.set_session_name(session_name)
@@ -59,13 +59,19 @@ class Controller:
 
     def open_transcript(self, transcript_filename):
         self.session_manager.import_transcript(transcript_filename)
-        self.segment_manager.initialise_segment_data_from_transcript(self.session_data.transcript)
+        self.segment_manager.initialise_segment_data_from_transcript(
+            self.session_data.transcript
+        )
         session_name = self.utils.get_session_name()
         normaliser = self.audio_player.audio_info.peak_amplitude
         self.window_manager.initialise_window_data(self.segment_data, normaliser)
         self.save_session(session_name)
-        self.view.update_for_open_transcript(
-            session_name, self.session_data, self.segment_data,self.window_data,  self.audio_player
+        self.view.update_for_open_file(
+            session_name,
+            self.session_data,
+            self.segment_data,
+            self.window_data,
+            self.audio_player,
         )
 
     def open_audiofile(self, audio_filename):
@@ -73,29 +79,35 @@ class Controller:
         self.session_data.audio_filename = audio_filename
         self.audio_player.load_audio_file(audio_filename)
         self.save_session(self.utils.get_session_name())
-        #self.segment_manager.update_window_timestamp(self.segment_data)
-        normaliser = self.audio_player.audio_info.peak_amplitude
-        #self.segment_manager.initialise_window_data(self.segment_data, normaliser)
-        self.view.update_for_open_transcript(
-            session_name, self.session_data, self.segment_data, self.window_data, self.audio_player
+        self.view.update_for_open_file(
+            session_name,
+            self.session_data,
+            self.segment_data,
+            self.window_data,
+            self.audio_player,
         )
-        
-    #======================================
+
+    # ======================================
     #              SEGMENTS
-    #======================================
+    # ======================================
     def change_segment_by_delta(self, delta):
         new_index = self.segment_data.curr_index + delta
         transcript = self.session_data.transcript
         session_name = self.utils.get_session_name()
 
         self.segment_manager.change_segment(transcript, new_index)
-        self.segment_manager.update_overlap_status(self.segment_data, transcript)
         self.window_manager.reset_window_to_match_segment(self.segment_data)
         self.save_session(session_name)
-
-        self.view.update_for_change_segment(self.segment_data, self.window_data, self.audio_player)
+        self.view.update_for_change_segment(
+            self.segment_data, self.window_data, self.audio_player
+        )
         self.audio_player.play_audio(self.window_data.start, self.window_data.end)
         
+        self.window_manager.set_prev_next_markers(new_index, transcript)
+        
+        self.save_session(session_name)
+        self.console.log(self.segment_manager.detect_overlap(new_index, transcript))
+
     def go_to_segment(self, new_index):
         delta = new_index - self.segment_data.curr_index
         self.change_segment_by_delta(delta)
@@ -112,15 +124,15 @@ class Controller:
 
         self.segment_manager.edit_timestamps(transcript, curr_index, new_start, new_end)
         self.window_manager.reset_window_to_match_segment(self.segment_data)
-        self.segment_manager.update_overlap_status(self.segment_data, transcript)
+        
         self.save_session(self.utils.get_session_name())
 
         self.view.update_labels_for_save_timestamp_edits(self.segment_data)
         self.view.update_plot(self.window_data, self.audio_player)
 
-    #======================================
+    # ======================================
     #              AUDIO
-    #======================================
+    # ======================================
     def play_audio_window(self):
         start = self.window_data.start
         end = self.window_data.end
@@ -141,9 +153,9 @@ class Controller:
     def stop_audio(self):
         self.audio_player.stop_audio()
 
-    #======================================
+    # ======================================
     #            PLOT WINDOW
-    #======================================
+    # ======================================
     def change_window_start(self, delta):
         new_start = self.window_data.start + delta
         new_start = max(0, min(new_start, self.window_data.start_marker))
@@ -171,7 +183,6 @@ class Controller:
             self.window_data.end = self.window_data.end_marker
         self.view.update_plot(self.window_data, self.audio_player)
 
-
     def zoom_plot(self, delta):
         zoom_min, zoom_max = 0.1, 2
         zoom_scaler = self.window_data.zoom_scaler + delta
@@ -179,9 +190,9 @@ class Controller:
         self.window_data.zoom_scaler = zoom_scaler
         self.view.update_plot(self.window_data, self.audio_player)
 
-    #======================================
+    # ======================================
     #                MISC
-    #======================================
+    # ======================================
     def data_dump(self):
         print(f"Index = {self.segment_data.curr_index}")
         if session_name := self.utils.get_session_name():
@@ -191,5 +202,6 @@ class Controller:
             Debug.print_session_data(self.session_data, f"{session_name} session data:")
 
     def save_session(self, session_name):
-        self.utils.save_session(self.session_data, self.segment_data, self.window_data, session_name)
-
+        self.utils.save_session(
+            self.session_data, self.segment_data, self.window_data, session_name
+        )
