@@ -1,6 +1,6 @@
 import pytest
-from window_manager import WindowManager
-from window_data import WindowData
+from controllers.window_model import WindowManager
+from models.window_data import WindowData
 
 
 def test_set_prev_next_markers_empty_transcript():

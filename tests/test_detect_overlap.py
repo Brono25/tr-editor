@@ -1,6 +1,6 @@
 import pytest
-from segment_manager import SegmentManager
-from segment_data import SegmentData
+from models.segment_manager import SegmentManager
+from models.segment_data import SegmentData
 
 def create_segment_data(transcript, curr_index):
     segment_data = SegmentData()

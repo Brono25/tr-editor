@@ -4,12 +4,12 @@ import tkinter as tk
 import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from view_plot import PlotFrame
-from view_segment_control import SegmentControlFrame
-from view_session_control import SessionControlFrame
-from view_text import TextFrame
-from view_window_control import WindowControlFrame
-from view_console import Console
+from views.view_plot import PlotFrame
+from views.view_segment_control import SegmentControlFrame
+from views.view_session_control import SessionControlFrame
+from views.view_text import TextFrame
+from views.view_window_control import WindowControlFrame
+from views.view_console import Console
 
 DELTA = 250 / 1000
 SDELTA = 25 / 1000

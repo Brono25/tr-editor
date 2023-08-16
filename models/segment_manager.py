@@ -1,5 +1,5 @@
 import yaml
-from segment_data import Segment
+from models.segment_data import Segment
 
 
 class SegmentManager:

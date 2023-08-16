@@ -1,15 +1,15 @@
 import os
 
-from audio_player import AudioPlayer
-from debug import Debug
-from segment_data import SegmentData
-from segment_manager import SegmentManager
-from session_data import SessionData
-from session_manager import SessionManager
-from window_data import WindowData
-from window_manager import WindowManager
-from utilities import Utilities
-from view import View
+from controllers.audio_player import AudioPlayer
+from models.debug import Debug
+from models.segment_data import SegmentData
+from models.segment_manager import SegmentManager
+from models.session_data import SessionData
+from models.session_model import SessionManager
+from models.window_data import WindowData
+from models.window_model import WindowManager
+from models.utilities import Utilities
+from views.view import View
 
 
 class Controller:
