@@ -33,34 +33,6 @@ class Segment:
         self.language = None
 
 
-class Window:
-    def __init__(self, start=None, end=None, zoom_scaler=1):
-        self.start = None
-        self.end = None
-        self.zoom_scaler = zoom_scaler
-        self.normaliser = None
-
-    def to_dict(self):
-        return {
-            "start": self.start,
-            "end": self.end,
-            "zoom_scaler": self.zoom_scaler,
-            "normaliser": self.normaliser,
-        }
-
-    def update_from_dict(self, data):
-        self.start = data.get("start")
-        self.end = data.get("end")
-        self.zoom_scaler = data.get("zoom_scaler")
-        self.normaliser = data.get("normaliser")
-
-    def reset(self):
-        self.start = None
-        self.end = None
-        self.zoom_scaler = 1
-        self.normaliser = None
-
-
 class SegmentData:
     def __init__(self):
         self.curr_index = 0
@@ -69,7 +41,6 @@ class SegmentData:
         self.num_segments = 0
         self.overlap_status = None
         self.overlap_timestamp = None
-        self.window = Window()
         self.curr_segment = Segment()
         self.prev_segment = Segment()
         self.next_segment = Segment()
@@ -82,7 +53,6 @@ class SegmentData:
             "num_segments": self.num_segments,
             "overlap_status": self.overlap_status,
             "overlap_timestamp": self.overlap_timestamp,
-            "window": self.window.to_dict(),
             "curr_segment": self.curr_segment.to_dict(),
             "prev_segment": self.prev_segment.to_dict(),
             "next_segment": self.next_segment.to_dict(),
@@ -95,8 +65,6 @@ class SegmentData:
         self.num_segments = data.get("num_segments")
         self.overlap_status = data.get("overlap_status")
         self.overlap_timestamp = data.get("overlap_timestamp")
-        window_data = data.get("window", {})
-        self.window.update_from_dict(window_data)
         segment_data = data.get("curr_segment", {})
         self.curr_segment.update_from_dict(segment_data)
         prev_segment_data = data.get("prev_segment", {})
@@ -111,7 +79,6 @@ class SegmentData:
         self.num_segments = 0
         self.overlap_status = None
         self.overlap_timestamp = None
-        self.window.reset()
         self.curr_segment.reset()
         self.prev_segment.reset()
         self.next_segment.reset()

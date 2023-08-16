@@ -102,7 +102,7 @@ class WindowControlFrame:
 
         func = lambda: self.parent.call_function("save_timestamp_edits")
         self.save_edits_button = tk.Button(
-            save_edits_frame, text="save edits", command=func
+            save_edits_frame, text="\U0001F4BE", command=func
         )
         self.save_edits_button.pack()
 

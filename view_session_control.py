@@ -97,10 +97,10 @@ class SessionControlFrame:
             session_label = f"Active Session: {session_name_without_extension}"
         self.session_label_var.set(session_label)
 
-    def update_transcript_label(self, transcript):
-        if not transcript:
-            transcript = "None"
-        self.transcript_label_var.set(os.path.basename(transcript))
+    def update_transcript_label(self, transcript_filename):
+        if not transcript_filename:
+            transcript_filename = "None"
+        self.transcript_label_var.set(os.path.basename(transcript_filename))
 
     def update_audiofile_label(self, audiofile):
         if not audiofile:

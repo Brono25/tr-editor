@@ -1,5 +1,6 @@
 
-from segment_data import Segment, Window
+from segment_data import Segment
+
 class Debug:
 
     def __init__(self):
@@ -10,7 +11,7 @@ class Debug:
         print(f"\n{string}")
         print('-' * 30)
         for attr, value in data.__dict__.items():
-            if isinstance(value, (Segment, Window)):
+            if isinstance(value, (Segment)):
                 print(f"{attr}:")
                 for subattr, subvalue in value.__dict__.items(): 
                     print(f"    {subattr}: {subvalue}")

@@ -1,79 +1,38 @@
+window_data:
+  start: null
+  end: null
+  start_marker: null
+  end_marker: null
+  zoom_scaler: 1
+  normaliser: null
+  prev_marker: null
+  next_marker: null
 segment_data:
-  curr_index: 1
-  prev_index: 0
-  next_index: 2
-  num_segments: 9
+  curr_index: 0
+  prev_index: null
+  next_index: 1
+  num_segments: 0
   overlap_status: null
   overlap_timestamp: null
-  window:
-    start: 0.6460000000000001
-    end: 0.9310000000000005
-    zoom_scaler: 1
-    normaliser: null
   curr_segment:
-    start: 0.6460000000000001
-    end: 0.9310000000000005
-    label: KAY
-    text: "!s\xED@s hay@s un@s"
-    language: SPA
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
   prev_segment:
-    start: 0.47
-    end: 0.6070000000000002
-    label: KAY
-    text: '!so'
-    language: ENG
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
   next_segment:
-    start: 0.472
-    end: 2.105
-    label: KAY
-    text: '!range'
-    language: ENG
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
 session_data:
-  audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09.tr
-  transcript:
-  - - 0.47
-    - 0.6070000000000002
-    - KAY
-    - ENG
-    - '!so'
-  - - 0.6460000000000001
-    - 0.9310000000000005
-    - KAY
-    - SPA
-    - "!s\xED@s hay@s un@s"
-  - - 0.472
-    - 2.105
-    - KAY
-    - ENG
-    - '!range'
-  - - 1.2229999999999999
-    - 2.104
-    - KAY
-    - SPA
-    - "!ah\xED@s"
-  - - 2.18
-    - 2.49
-    - VAL
-    - ENG
-    - mhm
-  - - 2.3809999999999993
-    - 4.321
-    - KAY
-    - SPA
-    - "donde los polic\xEDas e practican"
-  - - 4.218000000000003
-    - 4.610999999999998
-    - KAY
-    - SPA
-    - "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
-  - - 4.294
-    - 7.485
-    - KAY
-    - ENG
-    - '!trainees the police trainees'
-  - - 7.387
-    - 8.618
-    - KAY
-    - ENG
-    - they do it every day
+  audio_filename: null
+  transcript_filename: null
+  transcript: []

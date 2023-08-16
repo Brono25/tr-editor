@@ -35,16 +35,23 @@ class AudioPlayer:
             print(f"An error occurred while loading the audio file: {e}")
             return None
 
-    def play_audio(self, start, end):
-        self.stop_audio()
-        start_ms = start * 1000
-        end_ms = end * 1000
-
+    def play_audio(self, start, end, skip_start=0, skip_end=0):
         if not self.audio_obj:
             print("Error: No audio loaded.")
             return
 
-        sliced_audio = self.audio_obj[start_ms:end_ms]
+        self.stop_audio()
+        start_ms = start * 1000
+        end_ms = end * 1000
+        skip_start_ms = skip_start * 1000
+        skip_end_ms = skip_end * 1000
+
+        if skip_start and skip_end:
+            first_part = self.audio_obj[start_ms:skip_start_ms]
+            second_part = self.audio_obj[skip_end_ms:end_ms]
+            sliced_audio = first_part + second_part
+        else:
+            sliced_audio = self.audio_obj[start_ms:end_ms]
 
         sliced_audio = PRE_SILENCE + sliced_audio + POST_SILENCE
 
@@ -97,3 +104,11 @@ class AudioPlayer:
         samples = np.array(audio_slice.get_array_of_samples())
         time_vector = np.linspace(start, end, len(samples))
         return samples / self.audio_info.peak_amplitude, time_vector
+
+    def reset(self):
+        self.audio_obj = None
+        self.audio_info = AudioInfo()
+        self._stop_flag = False
+        self._play_thread = None
+        if self._play_thread:
+            self._play_thread.join()

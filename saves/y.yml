@@ -1,19 +1,25 @@
+window_data:
+  start: null
+  end: null
+  start_marker: null
+  end_marker: null
+  zoom_scaler: 1
+  normaliser: null
+  prev_marker: null
+  next_marker: null
 segment_data:
   curr_index: 0
   prev_index: null
   next_index: 1
-  num_segments: 4
-  window:
-    start: 0.0
-    end: 1.0
-    plot_yaxis: TODO
-    plot_xaxis: TODO
+  num_segments: 0
+  overlap_status: null
+  overlap_timestamp: null
   curr_segment:
-    start: 0.0
-    end: 1.0
-    label: KAY
-    text: New text
-    language: ENG
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
   prev_segment:
     start: null
     end: null
@@ -21,32 +27,12 @@ segment_data:
     text: null
     language: null
   next_segment:
-    start: 1.0
-    end: 2.0
-    label: KAY
-    text: so its
-    language: SPA
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
 session_data:
-  audio_filename: /Users/brono/GitHub/tr-editer/saves/p_mono-sastre09.wav
-  transcript_filename: /Users/brono/GitHub/tr-editer/saves/sastre09-2.tr
-  transcript:
-  - - 0.0
-    - 1.0
-    - KAY
-    - ENG
-    - New text
-  - - 1.0
-    - 2.0
-    - KAY
-    - SPA
-    - so its
-  - - 2.0
-    - 3.0
-    - KAY
-    - ENG
-    - '!different'
-  - - 3.0
-    - 4.0
-    - KAY
-    - SPA
-    - '!hmmm'
+  audio_filename: null
+  transcript_filename: null
+  transcript: []

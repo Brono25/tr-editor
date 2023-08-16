@@ -5,57 +5,44 @@ from tkinter import messagebox
 class SegmentControlFrame:
     def __init__(self, parent):
         self.parent = parent
-
         self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
-        
 
-        label_change_segment = tk.Label(self.frame, text="Change Segment Index")
-        label_change_segment.grid(row=0, column=2, columnspan=3)
+        command = lambda: self.parent.call_function("play_audio")
+        self.play_button = self.create_button("\u25B6", 1, 0, command)
+        command = lambda: self.parent.call_function("skip_play")
+        self.skip_play = self.create_button("\u25B6||\u25B6", 1, 2, command)
+        command = lambda: self.parent.call_function("play_segment")
+        self.play_segment = self.create_button("|\u25B6|", 1, 1, command)
+        command = lambda: self.parent.call_function("stop_audio")
+        self.stop_button = self.create_button("\u25A0", 1, 3, command)
 
-        self.play_button = tk.Button(
-            self.frame,
-            text="Play",
-            command=self.parent.play_audio_button,
-            state=tk.DISABLED,
-        )
-        self.play_button.grid(row=1, column=0)
+        command = lambda: self.parent.call_function("decrement_index")
+        self.left_arrow_button = self.create_button("\u2190", 1, 4, command)
+        command = lambda: self.parent.call_function("increment_index")
+        self.right_arrow_button = self.create_button("\u2192", 1, 5, command)
 
-        self.stop_button = tk.Button(
-            self.frame, text="Stop", command=self.stop_segment, state=tk.DISABLED
-        )
-        self.stop_button.grid(row=1, column=1)
+        command = self.confirm_delete
+        self.delete_segment_button = self.create_button("\U0001F5D1", 1, 8, command)
 
-        self.left_arrow_button = tk.Button(
-            self.frame,
-            text="\u2190",
-            command=lambda: self.parent.call_function("decrement_index"),
-            state=tk.DISABLED,
-        )
-        self.left_arrow_button.grid(row=1, column=2)
-
-        self.right_arrow_button = tk.Button(
-            self.frame,
-                text="\u2192",
-            command=lambda: self.parent.call_function("increment_index"),
-            state=tk.DISABLED,
-        )
-        self.right_arrow_button.grid(row=1, column=3)
-
+        self.create_label("Change Segment Index", row=0, column=4, columnspan=3)
         self.text_box_input = tk.Entry(self.frame, width=5, state=tk.DISABLED)
-        self.text_box_input.grid(row=1, column=4)
+        self.text_box_input.grid(row=1, column=6)
         self.text_box_input.bind("<Return>", self.text_box_input_process)
 
         self.line_count_label = tk.Label(self.frame, text=" of (None)")
-        self.line_count_label.grid(row=1, column=5)
+        self.line_count_label.grid(row=1, column=7)
 
-        self.delete_segment_button = tk.Button(
-            self.frame, text="Delete", command=self.confirm_delete, state=tk.DISABLED
-        )
-        self.delete_segment_button.grid(row=1, column=6)
+    def create_button(self, text, row, column, command=None, state=tk.DISABLED):
+        button = tk.Button(self.frame, text=text, command=command, state=state)
+        button.grid(row=row, column=column)
+        return button
 
-    def stop_segment(self):
-        print("Stop")
+    def create_label(self, text, row, column, columnspan=1):
+        label = tk.Label(self.frame, text=text)
+        label.grid(row=row, column=column, columnspan=columnspan)
+
+
 
     def confirm_delete(self):
         result = messagebox.askyesno(
@@ -75,34 +62,30 @@ class SegmentControlFrame:
         self.right_arrow_button["state"] = tk.NORMAL
         self.text_box_input["state"] = tk.NORMAL
         self.delete_segment_button["state"] = tk.NORMAL
+        self.play_button["state"] = tk.NORMAL
+        self.stop_button["state"] = tk.NORMAL
+        self.skip_play["state"] = tk.NORMAL
+        self.play_segment["state"] = tk.NORMAL
 
     def deactivate_segment_control_buttons(self):
         self.left_arrow_button["state"] = tk.DISABLED
         self.right_arrow_button["state"] = tk.DISABLED
         self.text_box_input["state"] = tk.DISABLED
         self.delete_segment_button["state"] = tk.DISABLED
-
-    def update_play_stop_buttons(self, audiofile):
-        if audiofile:
-            self.activate_play_stop_buttons()
-        else:
-            self.deactivate_play_stop_buttons()
-
-    def activate_play_stop_buttons(self):
-        self.play_button["state"] = tk.NORMAL
-        self.stop_button["state"] = tk.NORMAL
-
-    def deactivate_play_stop_buttons(self):
         self.play_button["state"] = tk.DISABLED
         self.stop_button["state"] = tk.DISABLED
+        self.skip_play["state"] = tk.DISABLED
+        self.play_segment["state"] = tk.DISABLED
 
-    def update_line_count_label(self, count):
+
+
+    def set_total_num_segments_label(self, count):
         if count - 1 >= 0:
             self.line_count_label.config(text=f" of {count - 1}")
         else:
             self.line_count_label.config(text=f" of (None)")
 
-    def update_text_input(self, new_text=""):
+    def set_input_text_box_label(self, new_text=""):
         original_state = self.text_box_input.cget("state")
         self.text_box_input.config(state=tk.NORMAL)
         self.text_box_input.delete(0, tk.END)
