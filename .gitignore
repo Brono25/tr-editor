@@ -1,11 +1,3 @@
-# Ignore everything in the session folder
-sessions/*
-
-# Except for these specific files
-!sessions/count.wav
-!sessions/count.tr
-!sessions/count.yml
-
 
 # Mac system files
 .DS_Store
@@ -51,3 +43,9 @@ build/
 
 # Pytest
 .pytest_cache/
+
+# Ignore everything in the "sessions" directory
+!sessions/count.wav
+!sessions/count.tr
+!sessions/count.yml
+sessions/*
