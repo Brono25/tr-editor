@@ -1,10 +1,10 @@
 # Ignore everything in the session folder
-session/*
+sessions/*
 
 # Except for these specific files
-!session/count.wav
-!session/count.tr
-!session/count.yml
+!sessions/count.wav
+!sessions/count.tr
+!sessions/count.yml
 
 
 # Mac system files
