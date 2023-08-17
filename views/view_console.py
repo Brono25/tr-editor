@@ -28,6 +28,7 @@ class Console:
         if message:
             self.log_text.insert(tk.END, message + "\n")
             self.log_text.see(tk.END)
+            print(message)
 
     def clear(self):
         self.log_text.delete(1.0, tk.END)

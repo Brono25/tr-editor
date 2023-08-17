@@ -153,6 +153,13 @@ class Controller:
         self.view.update_for_change_segment(self.seg_data, self.win_data, self.plyr)
         self.view.update_labels_for_save_timestamp_edits(self.seg_data)
 
+    def edit_transcript_label_or_language(self, language, text):
+        self.seg_data.curr_segment.language = language
+        self.seg_data.curr_segment.text = text
+        self.ses_data.transcript[self.seg_data.curr_index][3] = language
+        self.ses_data.transcript[self.seg_data.curr_index][4] = text
+        self.save_session(self.utils.get_session_name())
+
     # ======================================
     #               AUDIO
     # ======================================

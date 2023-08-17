@@ -103,11 +103,12 @@ class SegmentManager:
         transcript[index][1] = new_end
 
     def find_all_instances_of_overlap(self, transcript):
+        self.console.log('\n' + "Running overlap test:")
         flag = False
         for i in range(len(transcript)):
             status = self.detect_overlap(transcript, curr_index=i)
             if status:
-                self.console.log(status)
+                self.console.log( ' ' * 5 + status)
                 flag = True
         if not flag:
             self.console.log("No overlaps detected")

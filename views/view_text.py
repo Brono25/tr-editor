@@ -1,8 +1,10 @@
 import tkinter as tk
+import re
 
 
 class TextFrame:
     def __init__(self, parent):
+        self.parent = parent
         self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
 
@@ -21,7 +23,9 @@ class TextFrame:
         self.scrollbar.config(command=self.transcript_text.yview)
 
         # Save button to trigger the save function
-        self.save_button = tk.Button(self.frame, text="Save", command=self.save_edits)
+        self.save_button = tk.Button(
+            self.frame, text="Save", command=self.process_edits
+        )
         self.save_button.pack()
 
     def update_text(self, segment_data):
@@ -62,11 +66,25 @@ class TextFrame:
 
         self.transcript_text.config(font=("Helvetica", 18))
 
-    #TODO
-    def save_edits(self):
-        # Retrieve the edited text
+    def process_edits(self):
         edited_text = self.transcript_text.get(1.0, tk.END)
+        lines = edited_text.split("\n")
+        lines = [x for x in lines if x != ""]
 
-        # Process or save the edited text as needed
-        # For example, print it to the console
-        print(edited_text)
+        pattern = re.compile(
+            r"Line\s+\d+:\s+\((-?\d+\.\d{3}),\s*(-?\d+\.\d{3})\)\s+:\s+[A-Z]{3}\s+:\s+(SPA|ENG|NA)\s+:\s+.*|^\s*-\s*$"
+        )
+
+        if len(lines) != 3:
+            return
+
+        for line in lines:
+            if not pattern.match(line):
+                self.parent.console.log("Invalid transcript edits")
+                return
+
+        _, _, _, language, text = lines[1].split(":")
+        language = language.strip()
+        text = text.strip()
+        self.parent.call_function("transcript_edits", language, text)
+
