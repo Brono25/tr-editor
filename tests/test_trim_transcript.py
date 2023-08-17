@@ -1,5 +1,5 @@
 import pytest
-from controllers.session_model import SessionManager
+from models.session_manager import SessionManager
 
 
 def run_test(trim_start, trim_end, transcript, expected_result):

@@ -1,5 +1,5 @@
 import pytest
-from controllers.window_model import WindowManager
+from models.window_manager import WindowManager
 from models.window_data import WindowData
 
 

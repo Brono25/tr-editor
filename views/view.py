@@ -1,19 +1,16 @@
-import os
 import tkinter as tk
 
-import matplotlib
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
+from views.view_console import Console
 from views.view_plot import PlotFrame
 from views.view_segment import SegmentControlFrame
 from views.view_session import SessionControlFrame
 from views.view_text import TextFrame
 from views.view_window import WindowControlFrame
-from views.view_console import Console
 
 DELTA = 250 / 1000
 SDELTA = 25 / 1000
 ZOOM_DELTA = 0.1
+
 # matplotlib.use("TkAgg")  # or another backend such as 'Qt5Agg'
 
 
@@ -46,15 +43,15 @@ class View:
             "skip_play": (self.controller.play_skip_audio, []),
             "play_segment": (self.controller.play_segment, []),
             "stop_audio": (self.controller.stop_audio, []),
-            # Timestamp Changes
-            "decrease_start": (self.controller.change_start_marker, [-DELTA]),
-            "small_decrease_start": (self.controller.change_start_marker, [-SDELTA]),
-            "increase_start": (self.controller.change_start_marker, [DELTA]),
-            "small_increase_start": (self.controller.change_start_marker, [SDELTA]),
-            "decrease_end": (self.controller.change_end_marker, [-DELTA]),
-            "small_decrease_end": (self.controller.change_end_marker, [-SDELTA]),
-            "increase_end": (self.controller.change_end_marker, [DELTA]),
-            "small_increase_end": (self.controller.change_end_marker, [SDELTA]),
+            # marker Changes
+            "decrease_start": (self.controller.change_marker, [-DELTA]),
+            "small_decrease_start": (self.controller.change_marker, [-SDELTA]),
+            "increase_start": (self.controller.change_marker, [DELTA]),
+            "small_increase_start": (self.controller.change_marker, [SDELTA]),
+            "decrease_end": (self.controller.change_marker, [-DELTA, False]),
+            "small_decrease_end": (self.controller.change_marker, [-SDELTA, False]),
+            "increase_end": (self.controller.change_marker, [DELTA, False]),
+            "small_increase_end": (self.controller.change_marker, [SDELTA, False]),
             "save_timestamp_edits": (self.controller.edit_timestamps_using_markers, []),
             # Segment Changes
             "decrement_index": (self.controller.change_segment_by_delta, [-1]),
@@ -95,64 +92,60 @@ class View:
     # ======================================
     #          UPDATE FOR BUTTON
     # ======================================
-    def update_for_open_session(
-        self, session_name, session_data, segment_data, audio_player
-    ):
-        curr_index = segment_data.curr_index
+    def update_for_open_session(self, session_name, session_data, seg_data, player):
+        curr_index = seg_data.curr_index
         transcript = session_data.transcript
         transcript_filename = session_data.transcript_filename
         audio_filename = session_data.audio_filename
 
         self.set_session_labels(session_name, transcript_filename, audio_filename)
-        self.text_ctrl.update_text(segment_data)
+        self.text_ctrl.update_text(seg_data)
         self.segment_ctrl.set_input_text_box_label(curr_index)
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
-        self.update_button_state(session_data, segment_data, audio_player)
+        self.update_button_state(session_data, seg_data, player)
 
         if not session_data.audio_filename:
             self.clear_plot()
 
-    def update_for_new_session(
-        self, session_name, segment_data, session_data, audio_player
-    ):
+    def update_for_new_session(self, session_name, seg_data, session_data, player):
         transcript = session_data.transcript
         transcript_filename = session_data.transcript_filename
         audio_filename = session_data.audio_filename
 
         self.set_session_labels(session_name, transcript_filename, audio_filename)
-        self.text_ctrl.update_text(segment_data)
-        self.update_button_state(session_data, segment_data, audio_player)
+        self.text_ctrl.update_text(seg_data)
+        self.update_button_state(session_data, seg_data, player)
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.segment_ctrl.set_input_text_box_label()
         self.clear_plot()
 
     def update_for_open_file(
-        self, session_name, session_data, segment_data, window_data, audio_player
+        self, session_name, session_data, seg_data, win_data, player
     ):
-        curr_index = segment_data.curr_index
+        curr_index = seg_data.curr_index
         transcript = session_data.transcript
         transcript_filename = session_data.transcript_filename
         audio_filename = session_data.audio_filename
         self.set_session_labels(session_name, transcript_filename, audio_filename)
-        self.text_ctrl.update_text(segment_data)
+        self.text_ctrl.update_text(seg_data)
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.segment_ctrl.set_input_text_box_label(curr_index)
-        self.update_button_state(session_data, segment_data, audio_player)
+        self.update_button_state(session_data, seg_data, player)
 
-        if audio_player.audio_obj:
-            self.update_plot(window_data, audio_player)
+        if player.audio_obj:
+            self.update_plot(win_data, player)
 
-    def update_for_change_segment(self, segment_data, window_data, audio_player):
-        curr_index = segment_data.curr_index
-        num_segments = segment_data.num_segments
+    def update_for_change_segment(self, seg_data, win_data, player):
+        curr_index = seg_data.curr_index
+        num_segments = seg_data.num_segments
 
-        self.text_ctrl.update_text(segment_data)
+        self.text_ctrl.update_text(seg_data)
         self.segment_ctrl.set_input_text_box_label(curr_index)
         self.segment_ctrl.set_total_num_segments_label(num_segments)
-        self.update_plot(window_data, audio_player)
+        self.update_plot(win_data, player)
 
-    def update_labels_for_save_timestamp_edits(self, segment_data):
-        self.update_timestamp_labels(segment_data)
+    def update_labels_for_save_timestamp_edits(self, seg_data):
+        self.update_timestamp_labels(seg_data)
 
     def play_audio_button(self):
         self.controller.play_audio_segment()
@@ -164,40 +157,42 @@ class View:
         self.session_ctrl.update_session_label(session_name)
         self.session_ctrl.update_audiofile_label(audio_name)
 
-    def update_timestamp_labels(self, segment_data):  # XX
-        self.text_ctrl.update_text(segment_data)
+    def update_timestamp_labels(self, seg_data):  # XX
+        self.text_ctrl.update_text(seg_data)
 
     def clear_plot(self):
         self.plot_ctrl.plot_audio()
 
-    def update_plot(self, window_data, audio_player):
-        w_start = window_data.start
-        w_end = window_data.end
-        start_marker = window_data.start_marker
-        end_marker = window_data.end_marker
-        zoom_level = window_data.zoom_scaler
-        prev_marker = window_data.prev_marker
+    def update_plot(self, win_data, player):
+        w_start = win_data.start
+        w_end = win_data.end
+        start_marker = win_data.start_marker
+        end_marker = win_data.end_marker
+        zoom_level = win_data.zoom_scaler
+        prev_marker = win_data.prev_marker
         if not w_start and not w_end:
             w_start, w_end = 0, 0
-        y, x = audio_player.get_audio_time_vectors(w_start, w_end)
+        y, x = player.get_audio_time_vectors(w_start, w_end)
         self.plot_ctrl.plot_audio(x, y / zoom_level)
 
         self.plot_ctrl.plot_vertical_line(start_marker)
         self.plot_ctrl.plot_vertical_line(end_marker)
 
-        self.plot_ctrl.plot_vertical_line(window_data.prev_marker,  color='lightblue', linestyle='dashed', label='x1')
-        self.plot_ctrl.plot_vertical_line(window_data.next_marker,  color='#FF6F61', linestyle='dashed',  label='x2')
+        self.plot_ctrl.plot_vertical_line(
+            win_data.prev_marker, color="lightblue", linestyle="dashed", label="x1"
+        )
+        self.plot_ctrl.plot_vertical_line(
+            win_data.next_marker, color="#FF6F61", linestyle="dashed", label="x2"
+        )
 
-    
-
-    def update_button_state(self, session_data, segment_data, audio_player):
+    def update_button_state(self, session_data, seg_data, player):
         if session_data:
             self.session_ctrl.activate_open_buttons()
-        if not audio_player.audio_obj:
+        if not player.audio_obj:
             self._de_activate_buttons()
         elif not session_data.audio_filename:
             self._de_activate_buttons()
-        elif not segment_data.curr_segment:
+        elif not seg_data.curr_segment:
             self._de_activate_buttons()
         elif not session_data.transcript_filename:
             self._de_activate_buttons()

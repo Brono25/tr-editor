@@ -1,63 +1,63 @@
 window_data:
-  start: 5.044
-  end: 7.6099999999999985
-  start_marker: 5.044
-  end_marker: 7.6099999999999985
-  zoom_scaler: 0.6000000000000001
-  normaliser: null
-  prev_marker: 5.285999999999997
-  next_marker: 7.387
+  start: 4.744000000000006
+  end: 7.485
+  start_marker: 4.744000000000006
+  end_marker: 7.485
+  zoom_scaler: 0.1
+  normaliser: 19625.0
+  prev_marker: 4.736
+  next_marker: null
 segment_data:
   curr_index: 7
   prev_index: 6
-  next_index: 8
-  num_segments: 9
+  next_index: null
+  num_segments: 8
   overlap_status: null
   overlap_timestamp: null
   curr_segment:
-    start: 5.044
-    end: 7.6099999999999985
+    start: 4.744000000000006
+    end: 7.485
     label: KAY
     text: '!trainees the police trainees'
     language: ENG
   prev_segment:
-    start: 4.343000000000001
-    end: 5.285999999999997
+    start: 4.293
+    end: 4.736
     label: KAY
     text: "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
     language: SPA
   next_segment:
-    start: 7.387
-    end: 8.618
-    label: KAY
-    text: they do it every day
-    language: ENG
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
 session_data:
   audio_filename: /Users/brono/GitHub/tr-editer/sessions/p_mono-sastre09.wav
   transcript_filename: /Users/brono/GitHub/tr-editer/sessions/sastre09.tr
   transcript:
-  - - 0.5450000000000003
-    - 0.8820000000000008
+  - - 0.47
+    - 2.107
     - KAY
     - ENG
     - '!so'
-  - - 0.8959999999999999
-    - 1.3560000000000008
+  - - 0.471
+    - 2.106
     - KAY
     - SPA
     - "!s\xED@s hay@s un@s"
-  - - 1.3720000000000003
-    - 1.6550000000000016
+  - - 0.472
+    - 2.105
     - KAY
     - ENG
     - '!range'
-  - - 1.6729999999999992
+  - - 2.079
     - 2.154
     - KAY
     - SPA
     - "!ah\xED@s"
-  - - 2.205
-    - 2.565
+  - - 2.18
+    - 2.49
     - VAL
     - ENG
     - mhm
@@ -66,18 +66,13 @@ session_data:
     - KAY
     - SPA
     - "donde los polic\xEDas e practican"
-  - - 4.343000000000001
-    - 5.285999999999997
+  - - 4.293
+    - 4.736
     - KAY
     - SPA
     - "!y@s y@s la@s gente@s que@s est\xE1n@s los@s"
-  - - 5.044
-    - 7.6099999999999985
+  - - 4.744000000000006
+    - 7.485
     - KAY
     - ENG
     - '!trainees the police trainees'
-  - - 7.387
-    - 8.618
-    - KAY
-    - ENG
-    - they do it every day

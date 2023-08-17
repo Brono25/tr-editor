@@ -1,4 +1,4 @@
-from controllers.session_model import SessionManager
+from models.session_manager import SessionManager
 
 def test_trim_types():
     session_manager = SessionManager([], None)
