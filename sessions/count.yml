@@ -1,36 +1,36 @@
 window_data:
-  start: 0.5
-  end: 1.0
-  start_marker: 0.5
-  end_marker: 1.0
+  start: 0.0
+  end: 0.5
+  start_marker: 0.0
+  end_marker: 0.5
   zoom_scaler: 1
   normaliser: 21586.0
-  prev_marker: 0.5
-  next_marker: 1.5
+  prev_marker: null
+  next_marker: null
 segment_data:
-  curr_index: 1
-  prev_index: 0
-  next_index: 2
+  curr_index: 0
+  prev_index: null
+  next_index: 1
   num_segments: 10
   overlap_status: null
   overlap_timestamp: null
   curr_segment:
-    start: 0.5
-    end: 1.0
-    label: AAA
-    text: one
-    language: ENG
-  prev_segment:
     start: 0.0
     end: 0.5
     label: AAA
     text: zero
     language: ENG
+  prev_segment:
+    start: null
+    end: null
+    label: null
+    text: null
+    language: null
   next_segment:
-    start: 1.5
-    end: 2.0
+    start: 0.5
+    end: 1.0
     label: AAA
-    text: two
+    text: one
     language: ENG
 session_data:
   audio_filename: /Users/brono/GitHub/tr-editer/sessions/count.wav

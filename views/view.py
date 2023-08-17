@@ -52,12 +52,14 @@ class View:
             "small_decrease_end": (self.controller.change_marker, [-SDELTA, False]),
             "increase_end": (self.controller.change_marker, [DELTA, False]),
             "small_increase_end": (self.controller.change_marker, [SDELTA, False]),
-            "save_timestamp_edits": (self.controller.edit_timestamps_using_markers, []),
             # Segment Changes
             "decrement_index": (self.controller.change_segment_by_delta, [-1]),
             "increment_index": (self.controller.change_segment_by_delta, [1]),
             "change_seg_input": (lambda i: self.controller.go_to_segment(i), []),
             "proceed_delete": (self.controller.delete_segment, []),
+            # Editing
+            "trim": (self.controller.trim_audio_and_transcript, []),
+            "save_timestamp_edits": (self.controller.edit_timestamps_using_markers, []),
             # View Control
             "zoom_in": (lambda x: self.controller.zoom_plot(x), [-ZOOM_DELTA]),
             "zoom_out": (lambda x: self.controller.zoom_plot(x), [ZOOM_DELTA]),

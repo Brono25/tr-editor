@@ -2,9 +2,13 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 
+SAVE_SYMBOL = "\U0001F4BE"
+OPEN_SYMBOL = "\U0001F4C1"
+NEW_SYMBOL = "\U0001F4C4"
+DEBUG_SYMBOL = "\u26C1"
 
 class SessionControlFrame:
-    def __init__(self, parent, button_width=10):
+    def __init__(self, parent, button_width=8):
         self.parent = parent
         self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
@@ -14,14 +18,14 @@ class SessionControlFrame:
         self.session_label.grid(row=0, column=0, columnspan=2)
         new_session_button = tk.Button(
             self.frame,
-            text="New Session",
+            text=f"{NEW_SYMBOL} Session",
             command=self.new_session,
             width=button_width,
         )
         new_session_button.grid(row=1, column=0)
         open_session_button = tk.Button(
             self.frame,
-            text="Open Session",
+            text=f"{OPEN_SYMBOL} Session",
             command=self.open_session,
             width=button_width,
         )
@@ -29,7 +33,7 @@ class SessionControlFrame:
 
         self.open_transcript_button = tk.Button(
             self.frame,
-            text="Open Transcript",
+            text=f"{OPEN_SYMBOL} Transcript",
             command=self.open_transcript,
             state=tk.DISABLED,
             width=button_width,
@@ -42,23 +46,44 @@ class SessionControlFrame:
         self.transcript_label.grid(row=2, column=1)
         self.open_audiofile_button = tk.Button(
             self.frame,
-            text="Open Audio",
+            text=f"{OPEN_SYMBOL} Audio",
             command=self.open_audio_file,
             state=tk.DISABLED,
             width=button_width,
         )
         self.open_audiofile_button.grid(row=3, column=0)
+        
         self.audiofile_label_var = tk.StringVar()
         self.audiofile_label = tk.Label(
             self.frame, textvariable=self.audiofile_label_var
         )
         self.audiofile_label.grid(row=3, column=1)
+
+
+        self.save_tr_button = tk.Button(
+            self.frame,
+            text=f"{SAVE_SYMBOL} .tr",
+            command=None,
+        )
+        self.save_tr_button.grid(row=1, column=3)
+
+        self.audiofile_label.grid(row=3, column=1)
+
+        self.save_rttm_button = tk.Button(
+            self.frame,
+            text=f"{SAVE_SYMBOL} .rttm",
+            command=None,
+        )
+        self.save_rttm_button.grid(row=1, column=4)
+
+    
+
         data_dump_button = tk.Button(
             self.frame,
-            text="Print Data",
+            text=DEBUG_SYMBOL,
             command=lambda: self.parent.call_function("data_dump"),
         )
-        data_dump_button.grid(row=1, column=3)
+        data_dump_button.grid(row=1, column=5)
 
     def new_session(self):
         file_path = filedialog.asksaveasfilename(

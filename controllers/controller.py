@@ -127,10 +127,26 @@ class Controller:
         self.view.update_plot(self.win_data, self.plyr)
         self.console.log(self.seg_mgr.detect_overlap(transcript, curr_index))
 
+    def trim_audio_and_transcript(self):
+        transcript = self.ses_data.transcript
+        trim_start = self.win_data.start_marker
+        trim_end = self.win_data.end_marker
+
+        trim_transcript = self.ses_mgr.trim_transcript(trim_start, trim_end, transcript)
+        self.ses_data.transcript = trim_transcript
+        p, c, n = self.seg_mgr.update_indexes(self.seg_data.curr_index, len(trim_transcript))
+        self.seg_mgr.update_segments_to_new_index(trim_transcript, p, c, n)
+        self.plyr.trim_audio(trim_start, trim_end)
+
+        self.view.update_for_change_segment(self.seg_data, self.win_data, self.plyr)
+        self.view.update_labels_for_save_timestamp_edits(self.seg_data)
+
+        
+
     # ======================================
     #               AUDIO
     # ======================================
-    def play_audio_window(self):
+    def play_audio_window(self):       
         start = self.win_data.start
         end = self.win_data.end
         self.plyr.play_audio(start, end)
@@ -145,6 +161,7 @@ class Controller:
     def play_segment(self):
         start = self.win_data.start_marker
         end = self.win_data.end_marker
+        print(self.plyr.audio_info.duration)
         self.plyr.play_audio(start, end)
 
     def stop_audio(self):

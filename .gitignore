@@ -1,3 +1,12 @@
+# Ignore everything in the session folder
+session/*
+
+# Except for these specific files
+!session/count.wav
+!session/count.tr
+!session/count.yml
+
+
 # Mac system files
 .DS_Store
 .AppleDouble

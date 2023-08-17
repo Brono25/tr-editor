@@ -42,8 +42,6 @@ class SegmentControlFrame:
         label = tk.Label(self.frame, text=text)
         label.grid(row=row, column=column, columnspan=columnspan)
 
-
-
     def confirm_delete(self):
         result = messagebox.askyesno(
             "Confirmation", "Are you sure you want to delete the current segment?"
@@ -76,8 +74,6 @@ class SegmentControlFrame:
         self.stop_button["state"] = tk.DISABLED
         self.skip_play["state"] = tk.DISABLED
         self.play_segment["state"] = tk.DISABLED
-
-
 
     def set_total_num_segments_label(self, count):
         if count - 1 >= 0:

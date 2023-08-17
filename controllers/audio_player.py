@@ -106,6 +106,25 @@ class AudioPlayer:
         time_vector = np.linspace(start, end, len(samples))
         return samples / self.audio_info.peak_amplitude, time_vector
 
+
+    def trim_audio(self, start, end):
+        if not self.audio_obj:
+            self.console.log("Error: No audio loaded.")
+            return
+
+        start_ms = start * 1000
+        end_ms = end * 1000
+
+        try:
+            first_part = self.audio_obj[:start_ms]
+            second_part = self.audio_obj[end_ms:]
+            self.audio_obj = first_part + second_part
+            self.console.log(f"Audio removed from {start} to {end} seconds.")
+        except Exception as e:
+            self.console.log(f"An error occurred while removing the audio: {e}")
+            return None
+
+
     def reset(self):
         self.audio_obj = None
         self.audio_info = AudioInfo()

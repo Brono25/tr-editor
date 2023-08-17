@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.messagebox as messagebox
 
 
 class WindowControlFrame:
@@ -100,6 +101,10 @@ class WindowControlFrame:
         save_edits_frame = tk.Frame(self.frame)
         save_edits_frame.pack(side=tk.LEFT, padx=10)
 
+        func = self.trim_audio
+        self.new_button = tk.Button(save_edits_frame, text="\u2702", command=func)
+        self.new_button.pack()
+
         func = lambda: self.parent.call_function("save_timestamp_edits")
         self.save_edits_button = tk.Button(
             save_edits_frame, text="\U0001F4BE", command=func
@@ -140,8 +145,10 @@ class WindowControlFrame:
         self.zoom_in_button.config(state=tk.DISABLED)
         self.save_edits_button.config(state=tk.DISABLED)
 
-    def trim_audio_action(self):
-        if self.trim_audio_var.get():
-            print("checked")
-        else:
-            print("unchecked")
+    def trim_audio(self):
+        response = messagebox.askyesno(
+            "Trim Audio and Transcript",
+            "Are you sure you want to trim the audio and transcript? This action is irreversible.",
+        )
+        if response:
+            self.parent.call_function("trim")
