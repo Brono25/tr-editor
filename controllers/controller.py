@@ -22,7 +22,7 @@ class Controller:
         self.ses_mgr = SessionManager(self.ses_data, self.console)
         self.seg_mgr = SegmentManager(self.seg_data, self.console)
         self.win_mgr = WindowManager(self.win_data)
-        self.utils = Utilities()
+        self.utils = Utilities(self.console)
         self.plyr = AudioPlayer(self.console)
 
         if session_name := self.utils.get_session_name():
@@ -86,13 +86,10 @@ class Controller:
         )
 
     def save_transcript(self, filename):
-        print(f"Save {filename}")
+        self.utils.save_transcript_to_file(self.ses_data.transcript, filename)
 
     def save_rttm(self, filename):
-        print(f"Save {filename}")
-
-
-
+        self.utils.save_transcript_as_rttm(self.ses_data.transcript, filename)
 
     # ======================================
     #              SEGMENTS
@@ -143,19 +140,19 @@ class Controller:
 
         trim_transcript = self.ses_mgr.trim_transcript(trim_start, trim_end, transcript)
         self.ses_data.transcript = trim_transcript
-        p, c, n = self.seg_mgr.update_indexes(self.seg_data.curr_index, len(trim_transcript))
+        p, c, n = self.seg_mgr.update_indexes(
+            self.seg_data.curr_index, len(trim_transcript)
+        )
         self.seg_mgr.update_segments_to_new_index(trim_transcript, p, c, n)
         self.plyr.trim_audio(trim_start, trim_end)
 
         self.view.update_for_change_segment(self.seg_data, self.win_data, self.plyr)
         self.view.update_labels_for_save_timestamp_edits(self.seg_data)
 
-        
-
     # ======================================
     #               AUDIO
     # ======================================
-    def play_audio_window(self):       
+    def play_audio_window(self):
         start = self.win_data.start
         end = self.win_data.end
         self.plyr.play_audio(start, end)
