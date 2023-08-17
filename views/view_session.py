@@ -7,6 +7,7 @@ OPEN_SYMBOL = "\U0001F4C1"
 NEW_SYMBOL = "\U0001F4C4"
 DEBUG_SYMBOL = "\u26C1"
 
+
 class SessionControlFrame:
     def __init__(self, parent, button_width=8):
         self.parent = parent
@@ -76,13 +77,20 @@ class SessionControlFrame:
         )
         self.save_rttm_button.grid(row=1, column=4)
 
+        self.save_audio_button = tk.Button(
+            self.frame,
+            text=f"{SAVE_SYMBOL} .wav",
+            command=self.save_audio,
+        )
+        self.save_audio_button.grid(row=1, column=5)
+
 
         data_dump_button = tk.Button(
             self.frame,
             text=DEBUG_SYMBOL,
             command=lambda: self.parent.call_function("data_dump"),
         )
-        data_dump_button.grid(row=1, column=5)
+        data_dump_button.grid(row=1, column=6)
 
     def new_session(self):
         file_path = filedialog.asksaveasfilename(
@@ -112,7 +120,15 @@ class SessionControlFrame:
         if transcript_filename:
             self.parent.call_function("open_transcript", transcript_filename)
             
-
+    def save_audio(self):
+        file_path = filedialog.asksaveasfilename(
+            initialdir=os.getcwd(),
+            defaultextension=".wav",
+            filetypes=[("WAV files", "*.wav")],
+        )
+        if file_path:
+            self.parent.call_function("save_audio", file_path)
+            self.parent.console.log(f"Saved {file_path}")
 
     def save_transcript(self):
         file_path = filedialog.asksaveasfilename(

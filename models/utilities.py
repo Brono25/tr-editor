@@ -1,6 +1,6 @@
 import yaml
 import os
-
+from pydub import AudioSegment
 
 class Utilities:
     def __init__(self, console):
@@ -72,7 +72,15 @@ class Utilities:
         self.console.log(f"Saved transcript to {filename}")
 
 
+    def save_audio(self, ply, filename):
+        if filename.endswith('.wav'):
+            filename = filename[:-4]
 
+        try:
+            ply.audio_obj.export(filename + '.wav', format="wav")
+            self.console.log(f"Saved audio to {filename}.wav")
+        except Exception as e:
+            self.console.log(f"An error occurred while saving the audio: {e}")
 
     # RTTM format creation adapted from the following source:
     # Title: StackOverflow - RTTM file format

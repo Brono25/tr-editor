@@ -91,6 +91,9 @@ class Controller:
     def save_rttm(self, filename):
         self.utils.save_transcript_as_rttm(self.ses_data.transcript, filename)
 
+    def save_audio(self, filename):
+        self.utils.save_audio(ply=self.plyr, filename=filename)
+
     # ======================================
     #              SEGMENTS
     # ======================================
@@ -228,3 +231,6 @@ class Controller:
         self.utils.save_session(
             self.ses_data, self.seg_data, self.win_data, session_name
         )
+
+    def run_test(self):
+        self.seg_mgr.find_all_instances_of_overlap(transcript=self.ses_data.transcript)

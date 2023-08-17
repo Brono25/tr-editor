@@ -19,7 +19,7 @@ class SegmentManager:
         self.console.log(
             f"Removed line {curr_index}: ({start}, {end}) {label}, {language}, {text}"
         )
-       
+
     def load_segment_data(self, session_name):
         try:
             with open(session_name, "r") as file:
@@ -40,7 +40,6 @@ class SegmentManager:
                 *transcript[self.segment_data.next_index]
             )
 
-
     def update_indexes(self, new_index, num_segments):
         p, c, n = self._get_prev_curr_next_indexes(new_index, num_segments)
         self.segment_data.prev_index = p
@@ -48,9 +47,9 @@ class SegmentManager:
         self.segment_data.next_index = n
         return p, c, n
 
-
-    def update_segments_to_new_index(self, transcript, prev_index, curr_index, next_index):
-        
+    def update_segments_to_new_index(
+        self, transcript, prev_index, curr_index, next_index
+    ):
         self.segment_data.num_segments = len(transcript)
 
         if transcript:
@@ -91,7 +90,6 @@ class SegmentManager:
 
         return prev_index, curr_index, next_index
 
-
     def edit_timestamps(self, transcript, index, new_start, new_end):
         self._edit_segment_timestamps(new_start, new_end)
         self._edit_transcript_timestamps(transcript, index, new_start, new_end)
@@ -103,6 +101,16 @@ class SegmentManager:
     def _edit_transcript_timestamps(self, transcript, index, new_start, new_end):
         transcript[index][0] = new_start
         transcript[index][1] = new_end
+
+    def find_all_instances_of_overlap(self, transcript):
+        flag = False
+        for i in range(len(transcript)):
+            status = self.detect_overlap(transcript, curr_index=i)
+            if status:
+                self.console.log(status)
+                flag = True
+        if not flag:
+            self.console.log("No overlaps detected")
 
 
     def detect_overlap(self, transcript, curr_index):
