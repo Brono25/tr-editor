@@ -39,7 +39,7 @@ class TextFrame:
             )
 
             if text:
-                return f"Line {index}:  ({start:.2f},   {end:.2f}) : {label} : {language} : {text}"
+                return f"Line {index}:  ({start:.3f},   {end:.3f}) : {label} : {language} : {text}"
             return "-"
 
         prev_text = get_line_text(segment_data.prev_segment, segment_data.prev_index)
@@ -62,7 +62,7 @@ class TextFrame:
 
         self.transcript_text.config(font=("Helvetica", 18))
 
-
+    #TODO
     def save_edits(self):
         # Retrieve the edited text
         edited_text = self.transcript_text.get(1.0, tk.END)

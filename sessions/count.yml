@@ -1,88 +1,88 @@
 window_data:
-  start: 0.0
-  end: 0.5
-  start_marker: 0.0
-  end_marker: 0.5
+  start: 3.875
+  end: 4.5
+  start_marker: 3.875
+  end_marker: 4.5
   zoom_scaler: 1
   normaliser: 21586.0
-  prev_marker: null
-  next_marker: null
+  prev_marker: 3.85
+  next_marker: 4.525
 segment_data:
-  curr_index: 0
-  prev_index: null
-  next_index: 1
+  curr_index: 6
+  prev_index: 5
+  next_index: 7
   num_segments: 10
   overlap_status: null
   overlap_timestamp: null
   curr_segment:
-    start: 0.0
-    end: 0.5
+    start: 3.875
+    end: 4.5
     label: AAA
-    text: zero
+    text: six
     language: ENG
   prev_segment:
-    start: null
-    end: null
-    label: null
-    text: null
-    language: null
-  next_segment:
-    start: 0.5
-    end: 1.0
+    start: 3.225
+    end: 3.85
     label: AAA
-    text: one
+    text: five
+    language: ENG
+  next_segment:
+    start: 4.525
+    end: 5.2
+    label: AAA
+    text: seven
     language: ENG
 session_data:
   audio_filename: /Users/brono/GitHub/tr-editer/sessions/count.wav
   transcript_filename: /Users/brono/GitHub/tr-editer/sessions/count.tr
   transcript:
-  - - 0.0
-    - 0.5
+  - - 0.05
+    - 0.625
     - AAA
     - ENG
     - zero
-  - - 0.5
-    - 1.0
+  - - 0.75
+    - 1.25
     - AAA
     - ENG
     - one
-  - - 1.5
-    - 2.0
+  - - 1.35
+    - 1.8
     - AAA
     - ENG
     - two
-  - - 2.5
-    - 3.0
+  - - 1.95
+    - 2.5
     - AAA
     - ENG
     - three
-  - - 3.5
-    - 4.0
+  - - 2.55
+    - 3.2
     - AAA
     - ENG
     - four
-  - - 4.5
-    - 5.0
+  - - 3.225
+    - 3.85
     - AAA
     - ENG
     - five
-  - - 5.5
-    - 5.6
+  - - 3.875
+    - 4.5
     - AAA
     - ENG
     - six
-  - - 5.5
-    - 5.6
+  - - 4.525
+    - 5.2
     - AAA
     - ENG
     - seven
-  - - 5.6
-    - 5.7
+  - - 5.275
+    - 5.725
     - AAA
     - ENG
     - eight
-  - - 5.7
-    - 5.8
+  - - 5.75
+    - 6.366
     - AAA
     - ENG
     - nine

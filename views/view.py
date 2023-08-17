@@ -7,8 +7,8 @@ from views.view_session import SessionControlFrame
 from views.view_text import TextFrame
 from views.view_window import WindowControlFrame
 
-DELTA = 250 / 1000
-SDELTA = 25 / 1000
+DELTA = 500 / 1000
+SDELTA = 10 / 1000
 ZOOM_DELTA = 0.1
 
 # matplotlib.use("TkAgg")  # or another backend such as 'Qt5Agg'

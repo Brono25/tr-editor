@@ -132,6 +132,7 @@ class Controller:
         self.view.update_labels_for_save_timestamp_edits(self.seg_data)
         self.view.update_plot(self.win_data, self.plyr)
         self.console.log(self.seg_mgr.detect_overlap(transcript, curr_index))
+        self.play_audio_window()
 
     def trim_audio_and_transcript(self):
         transcript = self.ses_data.transcript
@@ -167,7 +168,6 @@ class Controller:
     def play_segment(self):
         start = self.win_data.start_marker
         end = self.win_data.end_marker
-        print(self.plyr.audio_info.duration)
         self.plyr.play_audio(start, end)
 
     def stop_audio(self):

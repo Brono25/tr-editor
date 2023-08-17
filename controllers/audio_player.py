@@ -119,6 +119,7 @@ class AudioPlayer:
             first_part = self.audio_obj[:start_ms]
             second_part = self.audio_obj[end_ms:]
             self.audio_obj = first_part + second_part
+            self.audio_info.duration -= end - start
             self.console.log(f"Audio removed from {start} to {end} seconds.")
         except Exception as e:
             self.console.log(f"An error occurred while removing the audio: {e}")

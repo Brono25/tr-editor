@@ -61,12 +61,18 @@ class Utilities:
                 yaml.dump(initial_data, f, default_flow_style=False, sort_keys=False)
 
     def save_transcript_to_file(self, transcript, filename):
+        if filename.endswith(".rttm"):
+            filename = filename[:-5]
+
         with open(filename, "w") as file:
             for seg in transcript:
                 start, end, label, language, text = seg
-                line = f"{start}|{end}|{label}|{language}|{text}"
+                line = f"{start:.3f}|{end:.3f}|{label}|{language}|{text}"
                 file.write(line + "\n")
         self.console.log(f"Saved transcript to {filename}")
+
+
+
 
     # RTTM format creation adapted from the following source:
     # Title: StackOverflow - RTTM file format
