@@ -85,6 +85,15 @@ class Controller:
             self.plyr,
         )
 
+    def save_transcript(self, filename):
+        print(f"Save {filename}")
+
+    def save_rttm(self, filename):
+        print(f"Save {filename}")
+
+
+
+
     # ======================================
     #              SEGMENTS
     # ======================================

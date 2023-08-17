@@ -34,6 +34,8 @@ class View:
             # Session Management
             "open_session": (self.controller.open_session, []),
             "new_session": (self.controller.new_session, []),
+            "save_tr": (lambda file: self.controller.save_transcript(file), []),
+            "save_rttm": (lambda file: self.controller.save_rttm(file), []),
             "data_dump": (self.controller.data_dump, []),
             # Audio and Transcript Management
             "open_audio_file": (self.controller.open_audiofile, []),

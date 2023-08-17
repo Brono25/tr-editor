@@ -63,7 +63,7 @@ class SessionControlFrame:
         self.save_tr_button = tk.Button(
             self.frame,
             text=f"{SAVE_SYMBOL} .tr",
-            command=None,
+            command=self.save_transcript,
         )
         self.save_tr_button.grid(row=1, column=3)
 
@@ -72,11 +72,10 @@ class SessionControlFrame:
         self.save_rttm_button = tk.Button(
             self.frame,
             text=f"{SAVE_SYMBOL} .rttm",
-            command=None,
+            command=self.save_rttm,
         )
         self.save_rttm_button.grid(row=1, column=4)
 
-    
 
         data_dump_button = tk.Button(
             self.frame,
@@ -112,6 +111,29 @@ class SessionControlFrame:
         )
         if transcript_filename:
             self.parent.call_function("open_transcript", transcript_filename)
+            
+
+
+    def save_transcript(self):
+        file_path = filedialog.asksaveasfilename(
+            initialdir=os.getcwd(),
+            defaultextension=".tr",
+            filetypes=[("Transcript files", "*.tr")],
+        )
+        if file_path:
+            self.parent.call_function("save_tr", file_path)
+            self.parent.console.log(f"Saved {file_path}")
+
+
+    def save_rttm(self):
+        file_path = filedialog.asksaveasfilename(
+            initialdir=os.getcwd(),
+            defaultextension=".tr",
+            filetypes=[("RTTM files", "*.rttm")],
+        )
+        if file_path:
+            self.parent.call_function("save_rttm", file_path)
+
 
     def update_session_label(self, session):
         if not session:
@@ -135,3 +157,5 @@ class SessionControlFrame:
     def activate_open_buttons(self):
         self.open_audiofile_button["state"] = tk.NORMAL
         self.open_transcript_button["state"] = tk.NORMAL
+
+
