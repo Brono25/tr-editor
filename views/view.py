@@ -23,6 +23,7 @@ class View:
     def __init__(self, controller):
         self.controller = controller
         self.root = tk.Tk()
+        self.root.title("TR-Editor")
         self.session_ctrl = SessionControlFrame(self)
         self.text_ctrl = TextFrame(self)
         self.segment_ctrl = SegmentControlFrame(self)
