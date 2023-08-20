@@ -44,8 +44,8 @@ build/
 # Pytest
 .pytest_cache/
 
-# Ignore everything in the "sessions" directory
-!sessions/count.wav
-!sessions/count.tr
-!sessions/count.yml
-sessions/*
+# Ignore everything in the "demo" directory
+!demo/count.wav
+!demo/count.tr
+!demo/count.yml
+demo/*
