@@ -1,6 +1,10 @@
 import tkinter as tk
 import re
+from tkinter import messagebox
 
+TRASH_CAN = "\U0001F5D1"
+DUPLICATE_SYMBOL = "+"
+SAVE_SYMBOL = "\U0001F4BE"
 
 class TextFrame:
     def __init__(self, parent):
@@ -24,9 +28,17 @@ class TextFrame:
 
         # Save button to trigger the save function
         self.save_button = tk.Button(
-            self.frame, text="Save", command=self.process_edits
+            self.frame, text=SAVE_SYMBOL, command=self.process_edits
         )
         self.save_button.pack()
+
+        self.duplicate_segment_button = tk.Button(
+            self.frame, text=DUPLICATE_SYMBOL, command=None
+        )
+        self.duplicate_segment_button.pack()
+
+        self.delete_segment_button = tk.Button(self.frame, text=TRASH_CAN, command=self.confirm_delete)
+        self.delete_segment_button.pack()
 
     def update_text(self, segment_data):
         def get_line_text(segment, index):
@@ -88,3 +100,20 @@ class TextFrame:
         text = text.strip()
         self.parent.call_function("transcript_edits", language, text)
 
+    def confirm_delete(self):
+        result = messagebox.askyesno(
+            "Confirmation", "Are you sure you want to delete the current segment?"
+        )
+        if result:
+            self.parent.call_function("proceed_delete")
+
+
+    def activate_buttons(self):
+        self.save_button['state'] = tk.NORMAL
+        self.duplicate_segment_button['state'] = tk.NORMAL
+        self.delete_segment_button['state'] = tk.NORMAL
+
+    def deactivate_buttons(self):
+        self.save_button['state'] = tk.DISABLED
+        self.duplicate_segment_button['state'] = tk.DISABLED
+        self.delete_segment_button['state'] = tk.DISABLED
