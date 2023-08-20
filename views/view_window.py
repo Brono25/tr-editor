@@ -1,6 +1,8 @@
 import tkinter as tk
 import tkinter.messagebox as messagebox
 
+SCISSOR_SYMBOL = "\u2702"
+SAVE_SYMBOL = "\U0001F4BE"
 
 class WindowControlFrame:
     def __init__(self, parent):
@@ -102,12 +104,12 @@ class WindowControlFrame:
         save_edits_frame.pack(side=tk.LEFT, padx=10)
 
         func = self.trim_audio
-        self.new_button = tk.Button(save_edits_frame, text="\u2702", command=func)
-        self.new_button.pack()
+        self.trim_button = tk.Button(save_edits_frame, text=SCISSOR_SYMBOL, command=func)
+        self.trim_button.pack()
 
         func = lambda: self.parent.call_function("save_timestamp_edits")
         self.save_edits_button = tk.Button(
-            save_edits_frame, text="\U0001F4BE", command=func
+            save_edits_frame, text=SAVE_SYMBOL, command=func
         )
         self.save_edits_button.pack()
 
@@ -127,6 +129,7 @@ class WindowControlFrame:
         self.zoom_out_button.config(state=tk.NORMAL)
         self.zoom_in_button.config(state=tk.NORMAL)
         self.save_edits_button.config(state=tk.NORMAL)
+        self.trim_button.config(state=tk.NORMAL)
 
     def deactivate_buttons(self):
         self.window_control_button1.config(state=tk.DISABLED)
@@ -144,6 +147,7 @@ class WindowControlFrame:
         self.zoom_out_button.config(state=tk.DISABLED)
         self.zoom_in_button.config(state=tk.DISABLED)
         self.save_edits_button.config(state=tk.DISABLED)
+        self.trim_button.config(state=tk.DISABLED)
 
     def trim_audio(self):
         response = messagebox.askyesno(
