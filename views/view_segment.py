@@ -1,5 +1,10 @@
 import tkinter as tk
-from tkinter import messagebox
+
+
+PLAY_SYMBOL = "\u25B6"
+STOP_SYMBOL = "\u25A0"
+LEFT_ARROW = "\u2190"
+RIGHT_ARROW = "\u2192"
 
 
 class SegmentControlFrame:
@@ -9,21 +14,20 @@ class SegmentControlFrame:
         self.frame.pack(pady=10, padx=10)
 
         command = lambda: self.parent.call_function("play_audio")
-        self.play_button = self.create_button("\u25B6", 1, 0, command)
+        self.play_button = self.create_button(PLAY_SYMBOL, 1, 0, command)
         command = lambda: self.parent.call_function("skip_play")
-        self.skip_play = self.create_button("\u25B6||\u25B6", 1, 2, command)
+        self.skip_play = self.create_button(
+            f"{PLAY_SYMBOL}||{PLAY_SYMBOL}", 1, 2, command
+        )
         command = lambda: self.parent.call_function("play_segment")
-        self.play_segment = self.create_button("|\u25B6|", 1, 1, command)
+        self.play_segment = self.create_button(f"|{PLAY_SYMBOL}|", 1, 1, command)
         command = lambda: self.parent.call_function("stop_audio")
-        self.stop_button = self.create_button("\u25A0", 1, 3, command)
+        self.stop_button = self.create_button(STOP_SYMBOL, 1, 3, command)
 
         command = lambda: self.parent.call_function("decrement_index")
-        self.left_arrow_button = self.create_button("\u2190", 1, 4, command)
+        self.left_arrow_button = self.create_button(LEFT_ARROW, 1, 4, command)
         command = lambda: self.parent.call_function("increment_index")
-        self.right_arrow_button = self.create_button("\u2192", 1, 5, command)
-
-        command = self.confirm_delete
-        self.delete_segment_button = self.create_button("\U0001F5D1", 1, 8, command)
+        self.right_arrow_button = self.create_button(RIGHT_ARROW, 1, 5, command)
 
         self.create_label("Change Segment Index", row=0, column=4, columnspan=3)
         self.text_box_input = tk.Entry(self.frame, width=5, state=tk.DISABLED)
@@ -42,13 +46,6 @@ class SegmentControlFrame:
         label = tk.Label(self.frame, text=text)
         label.grid(row=row, column=column, columnspan=columnspan)
 
-    def confirm_delete(self):
-        result = messagebox.askyesno(
-            "Confirmation", "Are you sure you want to delete the current segment?"
-        )
-        if result:
-            self.parent.call_function("proceed_delete")
-
     def update_segment_control_buttons(self, num_segments):
         if num_segments:
             self.activate_segment_control_buttons()
@@ -59,7 +56,6 @@ class SegmentControlFrame:
         self.left_arrow_button["state"] = tk.NORMAL
         self.right_arrow_button["state"] = tk.NORMAL
         self.text_box_input["state"] = tk.NORMAL
-        self.delete_segment_button["state"] = tk.NORMAL
         self.play_button["state"] = tk.NORMAL
         self.stop_button["state"] = tk.NORMAL
         self.skip_play["state"] = tk.NORMAL
@@ -69,7 +65,6 @@ class SegmentControlFrame:
         self.left_arrow_button["state"] = tk.DISABLED
         self.right_arrow_button["state"] = tk.DISABLED
         self.text_box_input["state"] = tk.DISABLED
-        self.delete_segment_button["state"] = tk.DISABLED
         self.play_button["state"] = tk.DISABLED
         self.stop_button["state"] = tk.DISABLED
         self.skip_play["state"] = tk.DISABLED
