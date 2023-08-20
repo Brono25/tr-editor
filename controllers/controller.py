@@ -160,6 +160,16 @@ class Controller:
         self.ses_data.transcript[self.seg_data.curr_index][4] = text
         self.save_session(self.utils.get_session_name())
 
+    def duplicate_segment(self):
+        index = self.seg_data.curr_index
+        transcript = self.ses_data.transcript
+
+        start, end, label, language, text = transcript[index]
+        # slightly modify so segments dont have identical timestamps
+        dup_segment = [start + 0.01, end + 0.01, label, language, text]
+        tr = self.seg_mgr.insert_segment_at_index(transcript, dup_segment, index)
+        self.change_segment_by_delta(delta=0)
+
     # ======================================
     #               AUDIO
     # ======================================

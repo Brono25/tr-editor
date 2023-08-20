@@ -62,6 +62,7 @@ class View:
             "increment_index": (self.controller.change_segment_by_delta, [1]),
             "change_seg_input": (lambda i: self.controller.go_to_segment(i), []),
             "proceed_delete": (self.controller.delete_segment, []),
+            "duplicate_segment": (self.controller.duplicate_segment, []),
             # Editing
             "trim": (self.controller.trim_audio_and_transcript, []),
             "save_timestamp_edits": (self.controller.edit_timestamps_using_markers, []),

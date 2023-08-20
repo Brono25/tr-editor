@@ -32,8 +32,9 @@ class TextFrame:
         )
         self.save_button.pack()
 
+        command = lambda: self.parent.call_function("duplicate_segment")
         self.duplicate_segment_button = tk.Button(
-            self.frame, text=DUPLICATE_SYMBOL, command=None
+            self.frame, text=DUPLICATE_SYMBOL, command=command
         )
         self.duplicate_segment_button.pack()
 
