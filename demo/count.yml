@@ -1,0 +1,83 @@
+window_data:
+  start: 5.275
+  end: 5.725
+  start_marker: 5.275
+  end_marker: 5.725
+  zoom_scaler: 1
+  normaliser: 10923.0
+  prev_marker: 5.2
+  next_marker: 5.75
+segment_data:
+  curr_index: 7
+  prev_index: 6
+  next_index: 8
+  num_segments: 9
+  overlap_status: null
+  overlap_timestamp: null
+  curr_segment:
+    start: 5.275
+    end: 5.725
+    label: AAA
+    text: eight
+    language: ENG
+  prev_segment:
+    start: 4.525
+    end: 5.2
+    label: AAA
+    text: seven
+    language: ENG
+  next_segment:
+    start: 5.75
+    end: 6.366
+    label: AAA
+    text: nine
+    language: ENG
+session_data:
+  audio_filename: /Users/brono/GitHub/tr-editer/demo/count.wav
+  transcript_filename: /Users/brono/GitHub/tr-editer/demo/count.tr
+  transcript:
+  - - 0.05
+    - 0.625
+    - AAA
+    - ENG
+    - zero
+  - - 0.75
+    - 1.25
+    - AAA
+    - ENG
+    - one
+  - - 1.35
+    - 1.8
+    - AAA
+    - ENG
+    - two
+  - - 1.95
+    - 2.5
+    - AAA
+    - ENG
+    - three
+  - - 3.225
+    - 3.85
+    - AAA
+    - ENG
+    - five
+  - - 3.875
+    - 4.5
+    - AAA
+    - ENG
+    - six
+  - - 4.525
+    - 5.2
+    - AAA
+    - ENG
+    - seven
+  - - 5.275
+    - 5.725
+    - AAA
+    - ENG
+    - eight
+  - - 5.75
+    - 6.366
+    - AAA
+    - ENG
+    - nine
