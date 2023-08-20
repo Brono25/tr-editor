@@ -1,4 +1,7 @@
 
+#tr-editor files
+.treditor_cache.yml
+
 # Mac system files
 .DS_Store
 .AppleDouble
