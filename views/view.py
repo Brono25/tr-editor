@@ -216,10 +216,12 @@ class View:
         self.session_ctrl.activate_open_buttons()
         self.window_ctrl.activate_buttons()
         self.segment_ctrl.activate_segment_control_buttons()
+        self.text_ctrl.activate_buttons()
 
     def _de_activate_buttons(self):
         self.window_ctrl.deactivate_buttons()
         self.segment_ctrl.deactivate_segment_control_buttons()
+        self.text_ctrl.deactivate_buttons()
 
     def set_session_labels(self, session_name, transcript_filename, audio_filename):
         self.session_ctrl.update_audiofile_label(audio_filename)
