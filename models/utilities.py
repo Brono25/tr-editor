@@ -1,6 +1,7 @@
 import yaml
 import os
 from pydub import AudioSegment
+import shutil
 
 class Utilities:
     def __init__(self, console):
@@ -16,6 +17,38 @@ class Utilities:
         }
         with open(session_name, "w") as file:
             yaml.dump(data, file, default_flow_style=False, sort_keys=False)
+
+
+
+    def backup_save(self, session_data, segment_data, window_data, session_name):
+        # Get the directory of the transcript file
+        transcript_dir = os.path.dirname(session_data.transcript_filename)
+
+        # Ensure the .backup directory exists in the same directory as the transcript file
+        backup_dir = os.path.join(transcript_dir, '.backup')
+        if not os.path.exists(backup_dir):
+            os.makedirs(backup_dir)
+
+        # Split the session name into the base name and extension
+        base_name, extension = os.path.splitext(os.path.basename(session_name))
+
+        # Determine the next available backup number
+        backup_number = 0
+        while True:
+            backup_file_name = os.path.join(backup_dir, f'{base_name}_{backup_number}{extension}')
+            if not os.path.exists(backup_file_name):
+                break
+            backup_number += 1
+
+        # Use the save_session method to save the session to the backup file
+        self.save_session(session_data, segment_data, window_data, backup_file_name)
+
+        print(f"Backup saved to {backup_file_name}")
+
+
+
+
+
 
     def get_session_name(self):
         with open(self.session_cache, "r") as f:

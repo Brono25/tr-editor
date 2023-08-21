@@ -136,6 +136,12 @@ class Controller:
         self.view.update_plot(self.win_data, self.plyr)
         self.console.log(self.seg_mgr.detect_overlap(transcript, curr_index))
         self.play_audio_window()
+        self.utils.backup_save(
+            self.ses_data,
+            self.seg_data,
+            self.win_data,
+            self.utils.get_session_name(),
+        )
 
     def trim_audio_and_transcript(self):
         transcript = self.ses_data.transcript
