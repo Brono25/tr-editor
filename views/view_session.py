@@ -13,6 +13,7 @@ class SessionControlFrame:
         self.parent = parent
         self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
+        self.current_session_dir = os.getcwd()
 
         self.session_label_var = tk.StringVar()
         self.session_label = tk.Label(self.frame, textvariable=self.session_label_var)
@@ -94,17 +95,23 @@ class SessionControlFrame:
 
     def new_session(self):
         file_path = filedialog.asksaveasfilename(
-            initialdir=os.getcwd(),
+            initialdir=self.current_session_dir,
             defaultextension=".yml",
             filetypes=[("YAML files", "*.yml")],
         )
         if file_path:
+            self.current_session_dir = os.path.dirname(file_path)
             self.parent.call_function("new_session", file_path)
 
     def open_session(self):
-        session_path = filedialog.askopenfilename(filetypes=[("YAML files", "*.yml")])
+        session_path = filedialog.askopenfilename(
+            initialdir=self.current_session_dir,
+            filetypes=[("YAML files", "*.yml")],
+        )
         if session_path:
+            self.current_session_dir = os.path.dirname(session_path)
             self.parent.call_function("open_session", session_path)
+
 
 
     def open_audio_file(self):
@@ -122,7 +129,7 @@ class SessionControlFrame:
             
     def save_audio(self):
         file_path = filedialog.asksaveasfilename(
-            initialdir=os.getcwd(),
+            initialdir=self.current_session_dir,
             defaultextension=".wav",
             filetypes=[("WAV files", "*.wav")],
         )
@@ -132,7 +139,7 @@ class SessionControlFrame:
 
     def save_transcript(self):
         file_path = filedialog.asksaveasfilename(
-            initialdir=os.getcwd(),
+            initialdir=self.current_session_dir,
             defaultextension=".tr",
             filetypes=[("Transcript files", "*.tr")],
         )
@@ -143,8 +150,8 @@ class SessionControlFrame:
 
     def save_rttm(self):
         file_path = filedialog.asksaveasfilename(
-            initialdir=os.getcwd(),
-            defaultextension=".tr",
+            initialdir=self.current_session_dir,
+            defaultextension=".rttm",
             filetypes=[("RTTM files", "*.rttm")],
         )
         if file_path:
