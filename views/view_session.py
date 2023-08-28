@@ -182,3 +182,5 @@ class SessionControlFrame:
         self.open_transcript_button["state"] = tk.NORMAL
 
 
+    def set_session_dir_from_file(self, file_path):
+        self.current_session_dir = os.path.dirname(file_path)

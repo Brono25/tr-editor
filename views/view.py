@@ -1,5 +1,5 @@
 import tkinter as tk
-
+import os
 from views.view_console import Console
 from views.view_plot import PlotFrame
 from views.view_segment import SegmentControlFrame
@@ -115,7 +115,7 @@ class View:
         self.segment_ctrl.set_input_text_box_label(curr_index)
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.update_button_state(session_data, seg_data, player)
-
+        self.session_ctrl.set_session_dir_from_file(transcript_filename)
         if not session_data.audio_filename:
             self.clear_plot()
 

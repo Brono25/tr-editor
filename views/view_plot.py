@@ -17,14 +17,17 @@ class PlotFrame:
 
     def plot_audio(self, x=None, y=None):
         self.plot_ax.clear()
-        if x is not None and y is not None and len(x) > 0: 
-            self.plot_ax.plot(x, y)
-            self.plot_ax.set_xlim(x[0], x[-1])  
+        if x is not None and y is not None and len(x) > 0:
+            line, = self.plot_ax.plot(x, y)  # Capture the line object
+            line.set_linewidth(0.5)  # Set the line width
+            self.plot_ax.set_xlim(x[0], x[-1])
         else:
             self.plot_ax.plot([])
 
         self.plot_ax.set_ylim(-1, 1)
         self.plot_canvas.draw()
+
+
 
 
     def plot_vertical_line(self, x, color='black', linestyle='solid', linewidth=1.0, label=None):
