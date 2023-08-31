@@ -121,6 +121,7 @@ class AudioPlayer:
             self.audio_obj = first_part + second_part
             self.audio_info.duration -= end - start
             self.console.log(f"Audio removed from {start} to {end} seconds.")
+            self.console.audio_trim_log(start, end)
         except Exception as e:
             self.console.log(f"An error occurred while removing the audio: {e}")
             return None

@@ -8,6 +8,7 @@ class Utilities:
         self.session_cache = ".treditor_cache.yml"
         self.console = console
         self.initialise_cache()
+       
 
     def save_session(self, session_data, segment_data, window_data, session_name):
         data = {

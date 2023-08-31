@@ -118,6 +118,7 @@ class View:
         self.session_ctrl.set_session_dir_from_file(transcript_filename)
         if not session_data.audio_filename:
             self.clear_plot()
+        self.console.set_session_dir(session_name)
 
     def update_for_new_session(self, session_name, seg_data, session_data, player):
         transcript = session_data.transcript
@@ -130,6 +131,7 @@ class View:
         self.segment_ctrl.set_total_num_segments_label(len(transcript))
         self.segment_ctrl.set_input_text_box_label()
         self.clear_plot()
+        self.console.set_session_dir(session_name)
 
     def update_for_open_file(
         self, session_name, session_data, seg_data, win_data, player
