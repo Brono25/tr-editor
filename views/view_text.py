@@ -97,6 +97,7 @@ class TextFrame:
                 return
 
         _, _, label, language, text = lines[1].split(":")
+        label = label.strip()
         language = language.strip()
         text = text.strip()
         self.parent.call_function("transcript_edits", label, language, text)
