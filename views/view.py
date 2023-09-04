@@ -67,7 +67,7 @@ class View:
             "trim": (self.controller.trim_audio_and_transcript, []),
             "save_timestamp_edits": (self.controller.edit_timestamps_using_markers, []),
             "transcript_edits": (
-                lambda x, y: self.controller.edit_transcript_label_or_language(x, y),
+                lambda x, y, z: self.controller.edit_transcript_text(x, y, z),
                 [],
             ),
             # View Control

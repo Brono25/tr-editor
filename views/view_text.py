@@ -96,10 +96,10 @@ class TextFrame:
                 self.parent.console.log("Invalid transcript edits")
                 return
 
-        _, _, _, language, text = lines[1].split(":")
+        _, _, label, language, text = lines[1].split(":")
         language = language.strip()
         text = text.strip()
-        self.parent.call_function("transcript_edits", language, text)
+        self.parent.call_function("transcript_edits", label, language, text)
 
     def confirm_delete(self):
         result = messagebox.askyesno(
