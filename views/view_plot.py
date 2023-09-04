@@ -14,25 +14,40 @@ class PlotFrame:
         self.plot_canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         plt.xlabel("Seconds", fontsize=6)
 
-
     def plot_audio(self, x=None, y=None):
         self.plot_ax.clear()
+        total_time = 0
+
         if x is not None and y is not None and len(x) > 0:
-            line, = self.plot_ax.plot(x, y)  # Capture the line object
-            line.set_linewidth(0.5)  # Set the line width
+            self.plot_ax.plot(x, y, linewidth=0.5)
             self.plot_ax.set_xlim(x[0], x[-1])
+            total_time = x[-1] - x[0]
+
         else:
             self.plot_ax.plot([])
 
         self.plot_ax.set_ylim(-1, 1)
+
+        # Annotate text with padding
+        text_label = f"Total Time: {total_time:.2f} s"
+        self.plot_ax.annotate(
+            text_label,
+            xy=(0.99, 0.99),
+            xycoords="axes fraction",
+            fontsize=5,
+            ha="right",
+            va="top",
+        )
+
         self.plot_canvas.draw()
 
-
-
-
-    def plot_vertical_line(self, x, color='black', linestyle='solid', linewidth=1.0, label=None):
+    def plot_vertical_line(
+        self, x, color="black", linestyle="solid", linewidth=1.0, label=None
+    ):
         if x:
-            self.plot_ax.axvline(x=x, color=color, linestyle=linestyle, linewidth=linewidth)
+            self.plot_ax.axvline(
+                x=x, color=color, linestyle=linestyle, linewidth=linewidth
+            )
             if label:
-                self.plot_ax.text(x, -0.95, label, fontsize=6, color=color)  
+                self.plot_ax.text(x, -0.95, label, fontsize=6, color=color)
             self.plot_canvas.draw()
