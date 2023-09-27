@@ -11,6 +11,7 @@ class TextFrame:
         self.parent = parent
         self.frame = tk.Frame(parent.root)
         self.frame.pack(pady=10, padx=10)
+        self.text_has_focus = False 
 
         # Create a scrollbar
         self.scrollbar = tk.Scrollbar(self.frame)
@@ -26,6 +27,11 @@ class TextFrame:
         self.transcript_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=tk.YES)
         self.scrollbar.config(command=self.transcript_text.yview)
 
+
+
+        self.transcript_text.bind("<FocusIn>", self.on_focus_in)
+        self.transcript_text.bind("<FocusOut>", self.on_focus_out)
+
         # Save button to trigger the save function
         self.save_button = tk.Button(
             self.frame, text=SAVE_SYMBOL, command=self.process_edits
@@ -40,6 +46,14 @@ class TextFrame:
 
         self.delete_segment_button = tk.Button(self.frame, text=TRASH_CAN, command=self.confirm_delete)
         self.delete_segment_button.pack()
+
+    def on_focus_in(self, event):
+        self.text_has_focus = True
+        print("In Focus")
+
+    def on_focus_out(self, event):
+        self.text_has_focus = False
+        print("Not In Focus")
 
     def update_text(self, segment_data):
         def get_line_text(segment, index):
@@ -101,6 +115,7 @@ class TextFrame:
         language = language.strip()
         text = text.strip()
         self.parent.call_function("transcript_edits", label, language, text)
+        self.parent.root.focus_set()
 
     def confirm_delete(self):
         result = messagebox.askyesno(

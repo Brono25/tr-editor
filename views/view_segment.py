@@ -37,6 +37,18 @@ class SegmentControlFrame:
         self.line_count_label = tk.Label(self.frame, text=" of (None)")
         self.line_count_label.grid(row=1, column=7)
 
+        self.parent.root.bind('<g>', self.block_if_focused("decrement_index"))
+        self.parent.root.bind('<h>', self.block_if_focused("increment_index"))
+        self.parent.root.bind('<space>', self.block_if_focused("play_segment"))
+        self.parent.root.bind('<m>', self.block_if_focused("skip_play"))
+        self.parent.root.bind('<v>', self.block_if_focused("play_audio"))
+
+    def block_if_focused(self, func_name):
+        def wrapper(event):
+            if not self.parent.text_ctrl.text_has_focus:
+                self.parent.call_function(func_name)
+        return wrapper
+
     def create_button(self, text, row, column, command=None, state=tk.DISABLED):
         button = tk.Button(self.frame, text=text, command=command, state=state)
         button.grid(row=row, column=column)

@@ -17,6 +17,38 @@ class WindowControlFrame:
         self.init_end_timestamp_frame()
         self.init_zoom_and_save()
 
+        self.parent.root.bind('<s>', self.block_if_focused("small_decrease_start"))
+        self.parent.root.bind('<d>', self.block_if_focused("small_increase_start"))
+        self.parent.root.bind('<a>', self.block_if_focused("decrease_start"))
+        self.parent.root.bind('<f>', self.block_if_focused("increase_start"))
+
+        self.parent.root.bind('<k>', self.block_if_focused("small_decrease_end"))
+        self.parent.root.bind('<l>', self.block_if_focused("small_increase_end"))
+        self.parent.root.bind('<j>', self.block_if_focused("decrease_end"))
+        self.parent.root.bind('<;>', self.block_if_focused("increase_end"))
+
+        self.parent.root.bind('<Return>', self.block_if_focused("save_timestamp_edits"))
+
+        # For multiple functions bound to one key, you'd need to modify the block_if_focused function
+        self.parent.root.bind('<Left>', self.block_if_focused_multiple("window_start_increase", "window_end_decrease"))
+        self.parent.root.bind('<Right>', self.block_if_focused_multiple("window_end_increase", "window_start_decrease"))
+
+    # Existing block_if_focused method
+    def block_if_focused(self, func_name):
+        def wrapper(event):
+            if not self.parent.text_ctrl.text_has_focus:
+                self.parent.call_function(func_name)
+        return wrapper
+
+    # New method for handling multiple functions
+    def block_if_focused_multiple(self, func_name1, func_name2):
+        def wrapper(event):
+            if not self.parent.text_ctrl.text_has_focus:
+                self.parent.call_function(func_name1)
+                self.parent.call_function(func_name2)
+        return wrapper
+
+
     def init_window_ctrl_frame(self):
         window_control_frame = tk.Frame(self.frame)
         window_control_frame.pack(side=tk.LEFT, padx=10)

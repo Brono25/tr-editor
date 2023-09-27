@@ -1,7 +1,7 @@
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
-
+import matplotlib.ticker as ticker
 
 class PlotFrame:
     def __init__(self, parent):
@@ -13,6 +13,8 @@ class PlotFrame:
         self.plot_canvas.draw()
         self.plot_canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         plt.xlabel("Seconds", fontsize=6)
+
+
 
     def plot_audio(self, x=None, y=None):
         self.plot_ax.clear()
@@ -27,9 +29,13 @@ class PlotFrame:
             self.plot_ax.plot([])
 
         self.plot_ax.set_ylim(-1, 1)
+        
+        # Convert x-axis labels to mm:ss format
+        self.plot_ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: f"{int(x // 60):02d}:{int(x % 60):02d}"))
 
         # Annotate text with padding
-        text_label = f"Total Time: {total_time:.2f} s"
+        mins, secs = divmod(int(total_time), 60)
+        text_label = f"Total Time: {mins:02d}:{secs:02d}"
         self.plot_ax.annotate(
             text_label,
             xy=(0.99, 0.99),
@@ -40,6 +46,7 @@ class PlotFrame:
         )
 
         self.plot_canvas.draw()
+
 
     def plot_vertical_line(
         self, x, color="black", linestyle="solid", linewidth=1.0, label=None
