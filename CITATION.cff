@@ -1,0 +1,18 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: TR-Editor
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Bronston
+    family-names: Ashford
+    email: bronston.a@gmail.com
+repository-code: 'https://github.com/Brono25/tr-editor.git'
+abstract: >-
+  An editor for transcript files to facilitate adapting the
+  Miami-Corpus for my thesis.
+date-released: '2023-11-13'
